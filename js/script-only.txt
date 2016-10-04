@@ -1,0 +1,28 @@
+// ==UserScript==
+// @name         CI360 Script only
+// @namespace    http://www.sas.com/CI
+// @version      0.8
+// @description  Insert CI360 tagging script into you target website
+// @author       You
+// @include      http*://www.qantas.com/*
+// @include      http*://www.ubs.com/ch/*
+// @include      http*://www.commerzbank.de/*
+// @grant        none
+// ==/UserScript==
+
+'use strict';
+// CI360 Tag...
+(function() {
+    var ot = document.createElement('script');
+    ot.type = 'text/javascript'; ot.id = 'ob-script-async'; ot.async = true;
+    ot.src = 'https://execution-euea.ci360.sas.com:443/js/ot_boot-min.js';
+
+    var a = document.createAttribute('a');
+    a.nodeValue = '0df0991f6000012d99e1a9d8'; // UPDATE BASED ON TENANT'S
+    // EXTERNAL ID
+    ot.attributes.setNamedItem(a);
+
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(ot, s);
+    console.log("CI360 Tag inserted successfully!");
+})();

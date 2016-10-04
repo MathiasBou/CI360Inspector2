@@ -1,0 +1,163 @@
+
+.event.load{
+	border-style: solid;
+    border-width: 2px;
+    border-color: rgba(90, 90, 90, 1);
+    border-radius: 10px;
+
+    vertical-align: middle;
+    text-align: center;
+    background: linear-gradient(to top, rgba(151, 167, 188, 1), rgba(200, 232, 253, 1));
+    padding-top: 7px;
+    min-height: 40px;
+    width: 75px;
+    margin: auto;
+}
+
+
+.event.click{
+	border-style: solid;
+    border-width: 1px;
+    border-color: rgba(90, 90, 90, 1);
+    border-radius: 50%;
+    vertical-align: middle;
+    text-align: center;
+    background: linear-gradient(to top, rgb(109, 126, 217), rgb(113, 192, 76));
+    padding-top: 9px;
+    min-height: 40px;
+    width: 40px;
+    margin: auto;
+    color: white;
+}
+
+
+.event.change{
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(90, 90, 90, 1);
+    border-radius: 50%;
+    vertical-align: middle;
+    text-align: center;
+    background: linear-gradient(to top, rgb(198, 217, 109), rgb(192, 169, 76));
+    padding-top: 9px;
+    min-height: 40px;
+    width: 40px;
+    margin: auto;
+    color: black;
+}
+
+.event.submit{
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(90, 90, 90, 1);
+    border-radius: 50%;
+    vertical-align: middle;
+    text-align: center;
+    background: linear-gradient(to top, rgb(109, 217, 167), rgb(255, 255, 255));
+    padding-top: 9px;
+    min-height: 40px;
+    width: 40px;
+    margin: auto;
+    color: black;
+}
+
+
+#lastEventsDiagram{
+    width: 750px;
+    margin: auto;
+}
+
+
+.event-bobble{
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 50%;
+    float: left;
+    display: table;
+}
+
+.event-bobble:hover{
+    border-width: 3px;
+}
+
+.event-bobble > p{
+    width: 80%;
+    height: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+
+
+
+#firstEventBubble{
+    top: 50px;
+    left: 0px;
+    position: relative;
+    height: 100px;
+    width: 100px;
+}
+
+#secoundEventBubble{
+    top: 40px;
+    left: -15px;
+    position: relative;
+    height: 120px;
+    width: 120px;
+}
+
+#thirdEventBubble{
+    top: 30px;
+    left: -45px;
+    position: relative;
+    height: 140px;
+    width: 140px;
+}
+
+#fourthEventBubble{
+    top: 10px;
+    left: -80px;
+    position: relative;
+    height: 180px;
+    width: 180px;
+}
+
+#fifthEventBubble{
+    top: 0px;
+    left: -110px;
+    position: relative;
+    height: 200px;
+    width: 200px;
+
+    border-style: dashed;
+}
+
+
+.event-bobble.load{
+    background-color: aliceblue;
+    border-color: #75caeb;
+}
+
+.event-bobble.click{
+    background-color: #ffecd7;
+    border-color: #ff4136;
+}
+
+
+.event-bobble.change{
+    background-color: honeydew;
+    border-color: #23a127;
+}
+
+.event-bobble.submit{
+    background-color: rgb(255, 248, 246);
+    border-color: #ff4136;
+}
+
+.event-bobble.other{
+    background-color: #D8F2F5;
+    border-color: #158cba;
+}
