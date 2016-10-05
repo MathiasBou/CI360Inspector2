@@ -20,7 +20,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">Configuration</h4>
+            <h4 class="modal-title" id="myModalLabel">CI360 Event Inspector Configuration</h4>
           </div>
 
           <div  class="modal-body">
@@ -87,7 +87,7 @@
           <div class="modal-footer"><!--end body-->
             <div class="row">
                 <div class="col-xs-6">
-                    Version 2.0 (last updated 2016-10-04)
+                    Version 2.0 (last updated 2016-10-05)
                 </div>
 
                 <div class="col-xs-6">
@@ -450,10 +450,10 @@
 ];
 
     var defaultSettingsObject = {
-        "adjustTimestamp":"7200000",
-        "suppress_identity_event_email_id":"false",
-        "suppress_identity_event_login_id":"false"
+        "adjustTimestampInMilliseconds":"7200000"
     };
+
+    var adjustTime = defaultSettingsObject.adjustTimestampInMilliseconds;
 
     var htmlTemplates = {};
         $("script[type='text/x-handlebars-template']").each(function(elem) {
@@ -464,11 +464,6 @@
     var aggrEvents = [];
     var sessionHistory = [];
     var demoCustomers = [];
-
-    var adjustTime = 7200000;
-    var suppress_identity_event_email_id = false;
-    var suppress_identity_event_login_id = false;
-    
 
     var relevantEvents = {"load": ["event", "page_title", "referrer", "uri", "^pe_*", "identity"], "click": ["event", "title", "uri", "targetInnerText", "anchor_href", "identity"], "change": ["event", "form\\.f\\.[\\w+|-]+$"], "submit": ["event", "form._h.name","form\\.f\\.[\\w+|-]+$"], "contentchange":["target", "value"], "IdentityEvent":["event", "title", "uri", "identity"]};
     var displayFullDetails = false;
@@ -649,31 +644,22 @@
 
     function trackEvent(eventData) {
 
-        updateUIAggregatedFields(eventData);
+        if (eventHistory.length > 0 && eventHistory[eventHistory.length-1].event == "IdentityEvent"
+            && eventData.event == "IdentityEvent") {
 
-        // set login identifier array to suppress certain identifier events
-        var login_identifier_to_suppress = [ ];
-        if (settingsObject.suppress_identity_event_email_id == "true") {
-            login_identifier_to_suppress.push( 'email_id' );
-        } 
-        if (settingsObject.login_identifier_to_suppress == "true") {
-            login_identifier_to_suppress.push( 'login_id' );
-        } 
-        console.log("login_identifier_to_suppress: ", login_identifier_to_suppress);
+            console.log("!!! NOT TRACKING EVENT: last AND current event type are Identity Events !!! ");
+            console.log("    login_event_type: ", eventData.login_event_type);
+            // don't capture event if current and last event are both Identity Events
 
-        // store event only if it is relevant
-        if(relevantEvents.hasOwnProperty(eventData.event)) {
+        } else {
+        
+            updateUIAggregatedFields(eventData);
+        
+            // store event only if it is relevant
+            if(relevantEvents.hasOwnProperty(eventData.event)) {
 
-            //todo: 3 login events fired by finance demo
-            if (eventData.login_event_type != undefined 
-                && login_identifier_to_suppress.indexOf( eventData.login_event_type ) > -1) {
-
-                // don't capture event!!
-
-            } else {
-
-                if (settingsObject.adjustTimestamp != undefined) {
-                    adjustTime = settingsObject.adjustTimestamp*1;
+                if (settingsObject.adjustTimestampInMilliseconds != undefined) {
+                    adjustTime = settingsObject.adjustTimestampInMilliseconds*1;
                 }
                 eventData.eventTimestamp = (new Date(eventData.timestamp*1+adjustTime)).toISOString().replace('T',' ').replace('Z','');
                 eventHistory.push(eventData);
@@ -698,7 +684,7 @@
                 $(".event-bobble:eq(4)").addClass( "other", 500, "easeOutBounce" );
             }
         
-        }    
+        }
     }
 
     function aggregateEventHistory(eventHistory) {
@@ -738,8 +724,8 @@
             
         }
 
-        if ((lastEvent.eventSource != undefined && lastEvent.eventSource == 'webmarketing')
-             || lastEvent.event == "IdentityEvent" ) {
+        if ((lastEvent.eventSource != undefined && lastEvent.eventSource == 'webmarketing' )
+             || lastEvent.event == "IdentityEvent") {
             //console.log("webmarketing event: ", lastEvent.event);
              
             lastEvent.eventText = lastEvent.event == "IdentityEvent" ? "Customer Login" : decodeURIComponent(lastEvent.eventname);
@@ -930,12 +916,12 @@
             session.oldidentity = lastSession.identity;
             session.css = "color:orangered";
             sessionHistory.push(session);
-            console.log(" identity event - adding record");
+            console.log("    tracking identity event with login_event_type: ", eventData.login_event_type);
         } 
         else if(lastSession.event == "IdentityEvent" 
                 && lastSession.oldidentity == lastSession.identity
                 && lastSession.updated == false) {
-            console.log("identity event updating....");
+            console.log("identity event updating with new ID...");
             sessionHistory[sessionHistory.length-1].identity = session.identity; 
             sessionHistory[sessionHistory.length-1].updated = true;
             

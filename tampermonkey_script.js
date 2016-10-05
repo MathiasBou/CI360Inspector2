@@ -7,17 +7,6 @@
 // @include      http*://www.sas.com/*
 // @include      http*://login.sas.com/*
 // @include      http*://www.sascompanystore.com/*
-// @include      https://www.ubs.com/*
-// @include      https://www.dm.de/*
-// @include      http*://www.commerzbank.com/*
-// @include      http*://commerzbank.com/*
-// @include      http*://www.commerzbank.de/*
-// @include      http*://www.vodafone.de/*
-// @include      http*://*.vodafone.de/*
-// @include      http*://*.tatrabanka.sk/*
-// @include      http*://*tesco*/*
-// @include      http*://*sparkasse.at/*
-// @include      http*://*kelloggsfamilyrewards.com/*
 
 // @exclude      *inqChat*
 // @exclude      *demdex*
@@ -33,6 +22,9 @@
     /* Configuration Here */
     var inspectorUrl = "http://localhost//CI360Inspector2/";
     //var inspectorUrl = "http://dachgpci01.emea.sas.com//CI360Inspector2/";
+
+    // PLEASE UPDATE WITH TENANT EXTERNAL ID
+    var tenantId = '0df0991f6000012d99e1a9d8';
     var overrideExistingTag = false;
     var keepTryingToGetDataHubId = true;
     var keepTryingToGetDataHubIdIterations = 10;
@@ -45,11 +37,10 @@
     } else {
         var ot = document.createElement('script');
         ot.type = 'text/javascript'; ot.id = 'ob-script-async'; ot.async = true;
-        ot.src = 'https://execution-euea.ci360.sas.com:443/t/s/s/0df0991f6000012d99e1a9d8';
+        ot.src = 'https://execution-euea.ci360.sas.com:443/t/s/s/' + tenantId;
 
         var a = document.createAttribute('a');
-        a.nodeValue = '0df0991f6000012d99e1a9d8'; // UPDATE BASED ON TENANT'S
-        // EXTERNAL ID
+        a.nodeValue = tenantId; 
         ot.attributes.setNamedItem(a);
 
         var s = document.getElementsByTagName('script')[0];
