@@ -87,14 +87,14 @@
           <div class="modal-footer"><!--end body-->
             <div class="row">
                 <div class="col-xs-6">
-                    Version 2.0 (last updated 2016-10-05)
+                    Version 2.0 (last updated 2016-10-06)
                 </div>
 
                 <div class="col-xs-6">
                     <button type="button" class="btn btn-default" 
                             data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" 
-                            data-dismiss="modal" onclick="saveCustomerObj();">Save</button>
+                            data-dismiss="modal" onclick="saveConfig();">Save</button>
                 </div>
             </div>
           </div>
@@ -643,6 +643,7 @@
     }
 
     function trackEvent(eventData) {
+        //console.log(" ----- start trackEvent");
 
         if (eventHistory.length > 0 && eventHistory[eventHistory.length-1].event == "IdentityEvent"
             && eventData.event == "IdentityEvent") {
@@ -652,29 +653,32 @@
             // don't capture event if current and last event are both Identity Events
 
         } else {
-        
+            //console.log(" ----- trackEvent: else", eventData);
             updateUIAggregatedFields(eventData);
         
             // store event only if it is relevant
             if(relevantEvents.hasOwnProperty(eventData.event)) {
+                //console.log(" ----- trackEvent: else2");
 
                 if (settingsObject.adjustTimestampInMilliseconds != undefined) {
                     adjustTime = settingsObject.adjustTimestampInMilliseconds*1;
                 }
                 eventData.eventTimestamp = (new Date(eventData.timestamp*1+adjustTime)).toISOString().replace('T',' ').replace('Z','');
+
+                
+                checkAndUpdateSession(eventData);
+
                 eventHistory.push(eventData);
 
-            
-                // store onle last 15 events
+                // store onle last 50 events
                 eventHistory = eventHistory.slice(-50);
                 localStorage.setItem('CI360InspectorEvents', JSON.stringify(eventHistory));
                 
-
                 // update journey
                 updateEventHistoryDiagram();
                 updateEventHistoryTable();
                 
-                checkAndUpdateSession(eventData);
+                //checkAndUpdateSession(eventData);
 
                 // display details of last event
                 var lastEventId = eventHistory.length - 1;
@@ -719,9 +723,7 @@
         if (lastEvent.eventSource != undefined && lastEvent.eventSource == 'webmarketing') {
         } else {
             //todo
-
                 $('#tableDetailedHistoryBody').append(htmlTemplates.eventAllRow(lastEvent));
-            
         }
 
         if ((lastEvent.eventSource != undefined && lastEvent.eventSource == 'webmarketing' )
@@ -889,7 +891,6 @@
     }
 
     function checkAndUpdateSession(eventData) {
-        //console.log("  check Session executed by " + caller);
 
         var session = {}; 
         session.sessionid = ""; 
@@ -909,8 +910,14 @@
             lastSession = sessionHistory[sessionHistory.length-1];
         }   
 
+        var lastEvent = {};
+        if (eventHistory.length > 0) {
+            lastEvent = eventHistory[eventHistory.length-1];
+        }
         
-        if(eventData.event == "IdentityEvent") {
+        //console.log(" ** lastSessionId: ", lastSession.sessionid);
+        //console.log(" ** current SessionId: ", eventData.session);
+        /*if(eventData.event == "IdentityEvent") {
             session.event = "IdentityEvent";
             session.piidata = decodeURIComponent(eventData.login_event);
             session.oldidentity = lastSession.identity;
@@ -939,8 +946,38 @@
                     sessionHistory[idx].updated = true;
                 }
             }            
+        }*/
+
+        // check if datahubid has changed and last sessionid is equals current sessionid
+        // then update session history
+        if (lastEvent.identity !== undefined && lastEvent.identity !== eventData.identity
+            && lastSession.sessionid == eventData.session) {
+            console.log("    ---> NEW IDENTITY FOUND ...updating.... ---");
+            console.log("      -- last event identity: ", lastEvent.identity);
+            console.log("      -- current event identity: ", eventData.identity);
+
+            session.event = "IdentityEvent";
+            //session.piidata = decodeURIComponent(eventData.login_event);
+            session.piidata = getLoginFromLastIdentityEvent();
+            session.oldidentity = lastEvent.identity;
+            session.css = "color:orangered";
+
+            // add session (because of identity change) to sessionHistory
+            sessionHistory.push(session);
+            
+            // update sessionHistory Array
+            for (idx in sessionHistory) {
+                if (sessionHistory[idx].identity == session.oldidentity
+                    && sessionHistory[idx].updated == false) {
+                    sessionHistory[idx].oldidentity = sessionHistory[idx].identity;
+                    sessionHistory[idx].identity = session.identity;
+                    sessionHistory[idx].updated = true;
+                }
+            }
         }
 
+        // check if it is a complete new session
+        // then update session history
         else if (session.sessionid != undefined && session.sessionid.length > 0) {
 
             var isNotSameSession = true;
@@ -952,13 +989,29 @@
 
             if(isNotSameSession == true) {
                 console.log("!!! is not same session...adding new session !!!");
+                
+                // add session (because it is a new session) to sessionHistory
                 sessionHistory.push(session);
-            } 
-            
+            }           
         }
+
         localStorage.setItem('CI360InspectorSessions', JSON.stringify(sessionHistory));
         updateSessionHistory();
         
+    }
+
+    function getLoginFromLastIdentityEvent() {
+        var reverseEventHistory = eventHistory.slice();
+        reverseEventHistory.reverse();
+        var identityEvent = {};
+        for (idx in reverseEventHistory) {
+            eventObj = reverseEventHistory[idx];
+            if (eventObj.event == "IdentityEvent") {
+                identityEvent = eventObj;
+                break;
+            }
+        }
+        return decodeURIComponent(identityEvent.login_event);
     }
 
     function getCustomer(customerIdentifier) {
@@ -1005,7 +1058,7 @@
         }
     }
 
-    function saveCustomerObj() {
+    function saveConfig() {
         var demoCustomers = $('#textareaCustomers').val();
         var settingsObject = $('#textareaSettings').val();
         localStorage.setItem('CI360Customers', demoCustomers);

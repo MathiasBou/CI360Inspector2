@@ -20,8 +20,8 @@
 (function() {
 
     /* Configuration Here */
-    var inspectorUrl = "http://localhost//CI360Inspector2/";
-    //var inspectorUrl = "http://dachgpci01.emea.sas.com//CI360Inspector2/";
+    //var inspectorUrl = "http://localhost//CI360Inspector2/";
+    var inspectorUrl = "http://dachgpci01.emea.sas.com//CI360Inspector2/";
 
     // PLEASE UPDATE WITH TENANT EXTERNAL ID
     var tenantId = '0df0991f6000012d99e1a9d8';
