@@ -964,6 +964,7 @@
 
             // add session (because of identity change) to sessionHistory
             sessionHistory.push(session);
+            logSession(session.event, eventData, eventData.uri, session.piidata);
             
             // update sessionHistory Array
             for (idx in sessionHistory) {
@@ -992,6 +993,7 @@
                 
                 // add session (because it is a new session) to sessionHistory
                 sessionHistory.push(session);
+                logSession(eventData.event, eventData, eventData.uri, "");
             }           
         }
 
@@ -1065,6 +1067,24 @@
         localStorage.setItem('CI360Settings', settingsObject);
     }
 
+    /***** API calls *****/
+    function logSession(eventtype, eventObject, detail1, detail2) {
+        return callApi({action: 'logSession',
+            detail1: detail1,
+            detail2: detail2,
+            eventtype: eventtype,
+            eventdata: eventObject
+        });
+    }
+
+    function callApi(parameters) {
+        var apiUrl = window.location.protocol + "//" + window.location.host + "/CI360Inspector2/api/";
+        return $.ajax(apiUrl, {
+            type: 'POST',
+            data: parameters
+        } );
+    }
+    /***** API calls *****/
 
     $( document ).ready(function() {
         
