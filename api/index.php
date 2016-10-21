@@ -49,11 +49,12 @@ function processRequest() {
 	//$token = getRequestParameter("token");
 
 	if ($action == 'logSession') {
+		$demoCustomers = getRequestParameter("demoCustomers");
 		$detail1 = getRequestParameter("detail1");
 		$detail2 = getRequestParameter("detail2");
 		$eventtype = getRequestParameter("eventtype");
 		$eventdata = getRequestParameter("eventdata");
-		logUsage($eventtype, $eventdata, $detail1, $detail2);
+		logUsage($eventtype, $eventdata, $detail1, $detail2, $demoCustomers);
 	}
  
 	else {
@@ -90,7 +91,7 @@ function generateRandomToken($bytes = 6){
 }
 
 
-function logUsage($eventType, $userPayload, $detail1, $detail2) {
+function logUsage($eventType, $userPayload, $detail1, $detail2, $demoCustomers) {
 	global $enable_logging;
 	global $mysql_link;
 
@@ -102,7 +103,7 @@ function logUsage($eventType, $userPayload, $detail1, $detail2) {
 	$userHost =  gethostbyaddr($_SERVER['REMOTE_ADDR']);
 	$userSystem =  "Computer: " .  ($userHost != null ?  $userHost : "Unknown" ) . ". Browser: " . htmlspecialchars($_SERVER["HTTP_USER_AGENT"]) ;
 
-	$sqlInsertQuery = "INSERT INTO ci360_inspector.demo_events (id, session,event_dttm, event_type, user_ip, user_system, user_scenario, detail1, detail2) VALUES (NULL, \"". session_id() ."\" ,CURRENT_TIMESTAMP, \"" . $eventType . "\", \"".$userIp."\",\"".$userSystem."\", \"". addslashes(json_encode($userPayload)) ."\", \"".$detail1."\",  \"".$detail2."\");";
+	$sqlInsertQuery = "INSERT INTO ci360_inspector.demo_events (id, session,event_dttm, event_type, user_ip, user_system, user_scenario, detail1, detail2, demo_customers) VALUES (NULL, \"". session_id() ."\" ,CURRENT_TIMESTAMP, \"" . $eventType . "\", \"".$userIp."\",\"".$userSystem."\", \"". addslashes(json_encode($userPayload)) ."\", \"".$detail1."\",  \"".$detail2."\",  \"".addslashes(json_encode($demoCustomers))."\");";
 	$mysql_link->query($sqlInsertQuery);
 	return true;
 }

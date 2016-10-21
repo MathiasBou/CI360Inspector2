@@ -69,7 +69,7 @@
 
 
 .event-bobble{
-    border-width: 1px;
+    border-width: 0px;
     border-style: solid;
     border-radius: 50%;
     float: left;
@@ -77,6 +77,10 @@
 }
 
 .event-bobble:hover{
+    border-width: 3px;
+}
+
+.event-bobble-bold{
     border-width: 3px;
 }
 
@@ -132,32 +136,65 @@
     height: 200px;
     width: 200px;
 
-    border-style: dashed;
+    /*border-style: dashed;*/
 }
 
 
 .event-bobble.load{
-    background-color: aliceblue;
-    border-color: #75caeb;
+    /*background-color: aliceblue;
+    border-color: #75caeb;*/
+    background-color: #afdaff;
+    border-color: #20a6da;
+    /*border-width: 0px;*/
 }
 
 .event-bobble.click{
-    background-color: #ffecd7;
-    border-color: #ff4136;
+    /*background-color: #ffecd7;
+    border-color: #ff4136;*/
+    background-color: #ffdbb4;
+    border-color: #ef620a;
+    /*border-width: 0px;*/
 }
 
 
 .event-bobble.change{
-    background-color: honeydew;
+    /*background-color: honeydew;
+    border-color: #23a127;*/
+    background-color: #dcf1dc;
     border-color: #23a127;
+    /*border-width: 0px;*/
 }
 
 .event-bobble.submit{
-    background-color: rgb(255, 248, 246);
+    /*background-color: rgb(255, 248, 246);
+    border-color: #ff4136;*/
+    background-color: rgb(247, 215, 206);
     border-color: #ff4136;
+    /*border-width: 0px;*/
 }
 
 .event-bobble.other{
-    background-color: #D8F2F5;
+    /*background-color: #D8F2F5;
+    border-color: #158cba;*/
+    background-color: #c5eaef;
     border-color: #158cba;
+    /*border-width: 0px;*/
+}
+
+.form-control {height: 25px;}
+
+pre {
+      white-space: pre;           /* CSS 2.0 */
+      white-space: pre-wrap;      /* CSS 2.1 */
+      white-space: pre-line;      /* CSS 3.0 */
+      white-space: -pre-wrap;     /* Opera 4-6 */
+      white-space: -o-pre-wrap;   /* Opera 7 */
+      white-space: -moz-pre-wrap; /* Mozilla */
+      white-space: -hp-pre-wrap;  /* HP Printers */
+      word-wrap: break-word;      /* IE 5+ */
+      background-color: rgba(245, 245, 245, 0);
+      border: 0px solid #ccc;
+      margin: -10px 0 -10px;
+      font-size: 14px;
+      font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
