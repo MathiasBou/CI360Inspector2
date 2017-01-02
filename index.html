@@ -35,7 +35,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div><!-- end eventModal -->
 
 
     <!-- Modal -->
@@ -47,76 +47,344 @@
             <h4 class="modal-title" id="myModalLabel">CI360 Event Inspector Configuration</h4>
           </div>
 
-          <div  class="modal-body">
+          <div  class="modal-body"><!-- Nav tabs -->
             
-        <!-- Nav tabs -->
+        
           <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active">
+            <li role="presentation" >
                 <a href="#demoCustomers" aria-controls="demoCustomers" role="tab" data-toggle="tab">Demo Customers</a>
             </li>
-            <li role="presentation">
-                <a href="#exportCustomers" aria-controls="exportCustomers" role="tab" data-toggle="tab">Export Customers</a>
+            <li role="presentation" class="active">
+                <a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a>
             </li>
             <li role="presentation">
-                <a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a>
+                <a href="#esp" aria-controls="esp" role="tab" data-toggle="tab">ESP</a>
+            </li>
+            <li role="presentation">
+                <a href="#help" aria-controls="help" role="tab" data-toggle="tab">Help</a>
             </li>
           </ul>
 
           <!-- Tab panes -->
           <div class="tab-content">
 
-            <!-- Customer Panel -->
-            <div role="tabpanel" class="tab-pane active" id="demoCustomers">                
+            <!-- Help Panel -->
+            <div role="tabpanel" class="tab-pane" id="help">                
                 <div class="row">
                     <div class="col-lg-12">
                         <br>
-                                <div class="text-center" width="20%">
-                                    <button type="button" onclick="addCustomer();" class="btn btn-sm btn-default">
-                                        <span class="glyphicon glyphicon-plus"></span> Add Customer
-                                    </button>
-                                </div>
+                        <p > 
+                            CI360 Event Inspector is developed by <b>Mathias Bouten</b> 
+                            <br><br>
+                            This tool is not officially supported by SAS Institute GmbH, it was developed to support
+                            demonstrations of SAS Customer Intelligence 360 capabilities.
+                            <br><br>
+                            If you have any questions or comments you can send an email to: <a href="mailto:mathias.bouten@sas.com?Subject=CI360EventInspector" target="_top">mathias.bouten@sas.com</a>
+                        </p>
                         <br>
-                             
-                        <table id="configuratorNbaTable" class="table table-striped table-hover table-bordered">
-                            <thead>
-                              
-                            </thead>
-                            <tbody id="configuratorCustomerTbody"></tbody>
-                        </table>
                     </div>
                 </div><!--end row-->
             </div> 
             <!-- end tabpanel -->
 
             <!-- Customer Panel -->
-            <div role="tabpanel" class="tab-pane" id="exportCustomers">
+            <div role="tabpanel" class="tab-pane" id="demoCustomers">                
                 <div class="row">
                     <div class="col-lg-12">
                         <br>
-                        <p class="text-primary"> You can easily copy and paste the text below and save it into a file to export this configuration!</p>
+                                <div class="text-center" width="20%">
+                                    <button type="button" onclick="addCustomer();" 
+                                        class="btn btn-sm btn-default editCustomers">
+                                        <span class="glyphicon glyphicon-plus"></span> Add Customer
+                                    </button>
+
+                                    <button type="button" onclick="exportBtnClick('Customers');" 
+                                        class="btn btn-sm btn-default editCustomers">
+                                        <span class="glyphicon glyphicon-download"></span> Export Customers
+                                    </button>
+
+                                    <button type="button" onclick="editBtnClick('Customers');" 
+                                        class="btn btn-sm btn-default expCustomers" style="display:none">
+                                        <span class="glyphicon glyphicon-edit"></span> Edit Customers
+                                    </button>
+                                </div>
                         <br>
-                        <textarea readonly id="textareaCustomers" type="text" class="form-control" rows="30"></textarea>
-                    </div><!-- end column-->
+                             
+                        <div class="editCustomers">
+                            <table id="configuratorCustomerTable" class="table table-striped table-hover table-bordered">
+                                <thead>
+                                  
+                                </thead>
+                                <tbody id="configuratorCustomerTbody"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="expCustomers" style="display:none">
+                            <br>
+                            <p class="text-primary"> Copy and paste the text below into a file to export this configuration!</p>
+                            <br>
+                            <textarea readonly id="textareaCustomers" type="text" class="form-control" rows="20"></textarea>
+                        </div>
+                    </div>
                 </div><!--end row-->
             </div> 
             <!-- end tabpanel -->
 
             <!-- Settings Panel -->
-            <div role="tabpanel" class="tab-pane" id="settings">
+            <div role="tabpanel" class="tab-pane active" id="settings">
+                
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label class="col-lg-7 col-md-7 col-sm-7 col-xs-7" >
-                                Adjust Timestamp in Milliseconds:
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                Adjust Timestamp (ms):
                             </label>
-                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">    
-                                <input id="adjustTimestamp" value="0" type="number" class="form-control">  
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                <input id="adjustTimestampInMilliseconds" value="0" type="number" class="settings form-control">  
                             </div>
                         </div>
-                        <br><br>
-                        <textarea readonly id="textareaSettings" type="text" class="form-control" rows="6"></textarea>
                     </div>
                 </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                Label Tab History:
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                <input id="label_history" value="" type="text" class="settings form-control">  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                Label Tab Events:
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                <input id="label_events" value="" type="text" class="settings form-control">  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                Label Tab Clicks:
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                <input id="label_clicks" value="" type="text" class="settings form-control">  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                Label Tab Loads:
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                <input id="label_loads" value="" type="text" class="settings form-control">  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                Label Tab Fields:
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                <input id="label_fields" value="" type="text" class="settings form-control">  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                Label Tab 360 Events:
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                <input id="label_360events" value="" type="text" class="settings form-control">  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                Label Tab Sessions:
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                <input id="label_sessions" value="" type="text" class="settings form-control">  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                <input class="settingsCheckbox" id="load" type="checkbox"> load
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">     
+                                <input id="eventpara_load" value="" type="text" class="settings form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                <input class="settingsCheckbox" id="click" type="checkbox"> click
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                <input id="eventpara_click" value="" type="text" class="settings form-control">
+                            </div>
+                        </div>
+                    </div>
+               
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                <input class="settingsCheckbox" id="change" type="checkbox"> change
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                <input id="eventpara_change" value="" type="text" class="settings form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                <input class="settingsCheckbox" id="submit" type="checkbox"> submit
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                <input id="eventpara_submit" value="" type="text" class="settings form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                <input class="settingsCheckbox" id="contentchange" type="checkbox"> contentchange
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">   
+                                <input id="eventpara_contentchange" value="" type="text" class="settings form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                <input class="settingsCheckbox" id="IdentityEvent" type="checkbox"> IdentityEvent
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                <input id="eventpara_IdentityEvent" value="" type="text" class="settings form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <input class="settingsCheckbox" id="spot_change" type="checkbox"> spot_change
+                                <input class="settingsCheckbox" id="spot_viewable" type="checkbox"> spot_viewable
+                                <input class="settingsCheckbox" id="DOMContentLoaded" type="checkbox"> DOMContentLoaded
+                                <input class="settingsCheckbox" id="unload" type="checkbox"> unload
+                                <br>                                
+                                
+                                <input class="settingsCheckbox" id="visibilitychange" type="checkbox"> visibilitychange
+                        </div> 
+                    </div>
+                </div>
+                
+            </div> 
+            <!-- end tabpanel -->
+
+            <!-- Settings Panel -->
+            <div role="tabpanel" class="tab-pane" id="esp">
+                
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <br>
+                                <div class="text-center" width="20%">
+                                    <button type="button" onclick="exportBtnClick('Settings');" 
+                                        class="btn btn-sm btn-default editSettings">
+                                        <span class="glyphicon glyphicon-download"></span> Export Settings
+                                    </button>
+
+                                    <button type="button" onclick="editBtnClick('Settings');" 
+                                        class="btn btn-sm btn-default expSettings" style="display:none">
+                                        <span class="glyphicon glyphicon-edit"></span> Edit Settings
+                                    </button>
+                                </div>
+                        <br>
+                    </div>
+                </div>
+
+
+                <div class="row editSettings">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5" >
+                                ESP Host:
+                            </label>
+                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">    
+                                <input id="espHost" placeholder="racesxXXXXXX.demo.sas.com" type="text" class=" settings form-control">  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5" >
+                                ESP Port (Pub/Sub):
+                            </label>
+                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">    
+                                <input id="espPort" value="8081" type="number" class="settings form-control">  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5" >
+                                ESP Project/Query:
+                            </label>
+                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">    
+                                <input id="espProjectQuery" placeholder="project/continous query" type="text" class="settings form-control">  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5" >
+                                ESP Source Window:
+                            </label>
+                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">    
+                                <input id="espSourceWindow" placeholder="source window name" type="text" class="settings form-control">  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row expSettings" style="display:none">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">    
+                                <textarea readonly id="textareaSettings" type="text" class="form-control" rows="20"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div> 
             <!-- end tabpanel -->
 
@@ -124,22 +392,25 @@
 
 
             
-          </div><!--end body-->
+        </div><!--end body-->
 
-          <div class="modal-footer"><!--end body-->
+        <div class="modal-footer">
             <div class="row">
                 <div class="col-xs-6">
-                    Version 2.0.2 (last updated 2016-10-20)
+                    <p class="text-left">Version 2.0.4 (2017-01-02)</p>
                 </div>
 
-                <div class="col-xs-6">
-                    <button type="button" class="btn btn-default" 
+                <div class="col-xs-6 ">
+                    <p class="text-right">
+                        <button type="button" class="btn btn-default" 
                             data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" 
+                        <button type="button" class="btn btn-primary" 
                             data-dismiss="modal" onclick="saveConfig();">Save</button>
+                    </p>
                 </div>
             </div>
-          </div>
+        </div><!--end footer-->
+
         </div>
       </div>
     </div>
@@ -185,207 +456,201 @@
     <hr />
 
 
-<!-- tab navigation -->
-<div>
 
-  <!-- Nav tabs -->
-  <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active">
-        <a href="#history" aria-controls="history" role="tab" 
-           data-toggle="tab">History</a></li>
-    <li role="presentation">
-        <a href="#detailedHistory" aria-controls="detailedHistory" role="tab" 
-           data-toggle="tab">All Events</a></li>
-    <li role="presentation">
-        <a href="#clickHistory" aria-controls="clickHistory" role="tab" 
-           data-toggle="tab">Click</a></li>
-    <li role="presentation">
-        <a href="#loadHistory" aria-controls="loadHistory" role="tab" 
-           data-toggle="tab">Load</a></li>
-    <li role="presentation">
-        <a href="#changeHistory" aria-controls="changeHistory" role="tab" 
-           data-toggle="tab">Field Interaction</a></li>
-    <li role="presentation">
-        <a href="#ci360History" aria-controls="ci360History" role="tab" 
-           data-toggle="tab">360 Events</a></li>
-    <li role="presentation">
-        <a href="#sessionHistory" aria-controls="sessionHistory" role="tab" 
-           data-toggle="tab">Sessions</a></li>
-  </ul>
+    <div><!-- tab navigation -->
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+            <a href="#history" aria-controls="history" role="tab" 
+               data-toggle="tab" id="tab_label_history">History</a></li>
+        <li role="presentation">
+            <a href="#detailedHistory" aria-controls="detailedHistory" role="tab" 
+               data-toggle="tab" id="tab_label_events">All Events</a></li>
+        <li role="presentation">
+            <a href="#clickHistory" aria-controls="clickHistory" role="tab" 
+               data-toggle="tab" id="tab_label_clicks">Clicks</a></li>
+        <li role="presentation">
+            <a href="#loadHistory" aria-controls="loadHistory" role="tab" 
+               data-toggle="tab" id="tab_label_loads">Loads</a></li>
+        <li role="presentation">
+            <a href="#changeHistory" aria-controls="changeHistory" role="tab" 
+               data-toggle="tab" id="tab_label_fields">Field Interactions</a></li>
+        <li role="presentation">
+            <a href="#ci360History" aria-controls="ci360History" role="tab" 
+               data-toggle="tab" id="tab_label_360events">360 Events</a></li>
+        <li role="presentation">
+            <a href="#sessionHistory" aria-controls="sessionHistory" role="tab" 
+               data-toggle="tab" id="tab_label_sessions">Sessions</a></li>
+      </ul>
 
-  <!-- Tab panes -->
-  <div class="tab-content">
+      <!-- Tab panes -->
+      <div class="tab-content">
 
-    <div role="tabpanel" class="tab-pane active" id="history">
+        <div role="tabpanel" class="tab-pane active" id="history">
 
-        <!-- Event History -->
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    
-                    <h3>Event History</h3>
-                    <p><a onclick="clearHistory();">(clear history)</a></p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12">
-                <div id="lastEventsDiagram">
-                    <div id="firstEventBubble" class="event-bobble click" onclick="onBubbleClick(this);">
-                        <p>...</p>
-                    </div>
-                    <div id="secoundEventBubble" class="event-bobble load" onclick="onBubbleClick(this);">
-                        <p>...</p>
-                    </div>
-                    <div id="thirdEventBubble" class="event-bobble submit" onclick="onBubbleClick(this);">
-                        <p>...</p>
-                    </div>
-                    <div id="fourthEventBubble" class="event-bobble change" onclick="onBubbleClick(this);">
-                        <p>...</p>
-                    </div>
-                    <div id="fifthEventBubble" class="event-bobble other" onclick="onBubbleClick(this);">
-                        <p>...</p>
+            <!-- Event History -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        
+                        <h3>Event History</h3>
+                        <p><a onclick="clearHistory();">(clear history)</a></p>
                     </div>
                 </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Event Details -->
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h3>Event Details</h3>
-                    <p><a onclick="toggleFullDetails();">(display/hide all)</a></p>
-                </div>
-                <div id="eventDetails" class="col-lg-12">
-                    Event Details (open)
+                <div class="row">
+                    <div class="col-xs-12">
+                    <div id="lastEventsDiagram">
+                        <div id="firstEventBubble" class="event-bobble click" onclick="onBubbleClick(this);">
+                            <p>...</p>
+                        </div>
+                        <div id="secoundEventBubble" class="event-bobble load" onclick="onBubbleClick(this);">
+                            <p>...</p>
+                        </div>
+                        <div id="thirdEventBubble" class="event-bobble submit" onclick="onBubbleClick(this);">
+                            <p>...</p>
+                        </div>
+                        <div id="fourthEventBubble" class="event-bobble change" onclick="onBubbleClick(this);">
+                            <p>...</p>
+                        </div>
+                        <div id="fifthEventBubble" class="event-bobble other" onclick="onBubbleClick(this);">
+                            <p>...</p>
+                        </div>
+                    </div>
+                    </div>
                 </div>
             </div>
 
-        </div>
+            <!-- Event Details -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h3>Event Details</h3>
+                        <p><a onclick="toggleFullDetails();">(display/hide all)</a></p>
+                    </div>
+                    <div id="eventDetails" class="col-lg-12">
+                        Event Details (open)
+                    </div>
+                </div>
+            </div>
+        </div> <!-- end tab /History --> 
 
+        <div role="tabpanel" class="tab-pane" id="sessionHistory">
+            <table class="table table-striped"> 
+                <thead> 
+                    <tr> 
+                        <th>Time</th> 
+                        <th>SessionId / VisitorId</th>
+                        <th>Identity</th> 
+                        <th>PII Data</th>
+                    </tr> 
+                </thead> 
+                <tbody id="tableSessionHistoryBody">  
+                </tbody> 
+            </table>
+        </div> <!-- end tab /sessionHistory -->
 
-    </div> <!-- end tab /History --> 
+        <div role="tabpanel" class="tab-pane" id="detailedHistory">
+            <table class="table table-striped"> 
+                <thead> 
+                    <tr> 
+                        <th>
+                            <a onclick="reorderEvents();">
+                                Time <span class="classEventsOrder"></span>
+                            </a>
+                        </th> 
+                        <th>SessionId / VisitorId</th>
+                        <th>Event</th> 
+                        <th>Details</th> 
+                        <!--<th>URI</th>-->
+                    </tr> 
+                </thead> 
+                <tbody id="tableDetailedHistoryBody">  
+                </tbody> 
+            </table>
+        </div> <!-- end tab /detailedHistory -->
 
-    <div role="tabpanel" class="tab-pane" id="sessionHistory">
-        <table class="table table-striped"> 
-            <thead> 
-                <tr> 
-                    <th>Time</th> 
-                    <th>SessionId / VisitorId</th>
-                    <th>Identity</th> 
-                    <th>PII Data</th>
-                </tr> 
-            </thead> 
-            <tbody id="tableSessionHistoryBody">  
-            </tbody> 
-        </table>
-    </div> <!-- end tab /sessionHistory -->
+        <div role="tabpanel" class="tab-pane" id="loadHistory">
+            <table class="table table-striped"> 
+                <thead> 
+                    <tr> 
+                        <th>
+                            <a onclick="reorderEvents();">
+                                Time <span class="classEventsOrder"></span>
+                            </a>
+                        </th>  
+                        <th>SessionId / VisitorId</th>
+                        <th>Event</th> 
+                        <th>Title / URI</th>
+                    </tr> 
+                </thead> 
+                <tbody id="tableLoadHistoryBody">  
+                </tbody> 
+            </table>
+        </div> <!-- end tab /loadHistory -->
 
-    <div role="tabpanel" class="tab-pane" id="detailedHistory">
-        <table class="table table-striped"> 
-            <thead> 
-                <tr> 
-                    <th>
-                        <a onclick="reorderEvents();">
-                            Time <span class="classEventsOrder"></span>
-                        </a>
-                    </th> 
-                    <th>SessionId / VisitorId</th>
-                    <th>Event</th> 
-                    <th>Details</th> 
-                    <!--<th>URI</th>-->
-                </tr> 
-            </thead> 
-            <tbody id="tableDetailedHistoryBody">  
-            </tbody> 
-        </table>
-    </div> <!-- end tab /detailedHistory -->
+        <div role="tabpanel" class="tab-pane" id="clickHistory">
+            <table class="table table-striped"> 
+                <thead> 
+                    <tr> 
+                        <th>
+                            <a onclick="reorderEvents();">
+                                Time <span class="classEventsOrder"></span>
+                            </a>
+                        </th>  
+                        <th>SessionId / VisitorId</th>
+                        <th>Event</th> 
+                        <th>Title / URI</th>
+                    </tr> 
+                </thead> 
+                <tbody id="tableClickHistoryBody">  
+                </tbody> 
+            </table>
+        </div> <!-- end tab /clickHistory -->
 
-    <div role="tabpanel" class="tab-pane" id="loadHistory">
-        <table class="table table-striped"> 
-            <thead> 
-                <tr> 
-                    <th>
-                        <a onclick="reorderEvents();">
-                            Time <span class="classEventsOrder"></span>
-                        </a>
-                    </th>  
-                    <th>SessionId / VisitorId</th>
-                    <th>Event</th> 
-                    <th>Title / URI</th>
-                </tr> 
-            </thead> 
-            <tbody id="tableLoadHistoryBody">  
-            </tbody> 
-        </table>
-    </div> <!-- end tab /loadHistory -->
+        <div role="tabpanel" class="tab-pane" id="changeHistory">
+            <table class="table table-striped"> 
+                <thead> 
+                    <tr> 
+                        <th>
+                            <a onclick="reorderEvents();">
+                                Time <span class="classEventsOrder"></span>
+                            </a>
+                        </th>  
+                        <th>SessionId / VisitorId</th>
+                        <th>Event</th> 
+                        <th>Field</th>
+                        <th>Value</th> 
+                        <th>URI</th> 
+                    </tr> 
+                </thead> 
+                <tbody id="tableChangeHistoryBody">  
+                </tbody> 
+            </table>
+        </div> <!-- end tab /changeHistory -->
 
+        <div role="tabpanel" class="tab-pane" id="ci360History">
+            <table class="table table-striped"> 
+                <thead> 
+                    <tr> 
+                        <th>
+                            <a onclick="reorderEvents();">
+                                Time <span class="classEventsOrder"></span>
+                            </a>
+                        </th>  
+                        <th>Visitor</th>
+                        <th>Event</th>
+                        <th>Details</th> 
+                        <th>Count</th>
+                    </tr> 
+                </thead> 
+                <tbody id="tableCi360HistoryBody">  
+                </tbody> 
+            </table>
+        </div> <!-- end tab /ci360History -->
 
-    <div role="tabpanel" class="tab-pane" id="clickHistory">
-        <table class="table table-striped"> 
-            <thead> 
-                <tr> 
-                    <th>
-                        <a onclick="reorderEvents();">
-                            Time <span class="classEventsOrder"></span>
-                        </a>
-                    </th>  
-                    <th>SessionId / VisitorId</th>
-                    <th>Event</th> 
-                    <th>Title / URI</th>
-                </tr> 
-            </thead> 
-            <tbody id="tableClickHistoryBody">  
-            </tbody> 
-        </table>
-    </div> <!-- end tab /clickHistory -->
+      </div><!-- end Tab panes -->
 
-    <div role="tabpanel" class="tab-pane" id="changeHistory">
-        <table class="table table-striped"> 
-            <thead> 
-                <tr> 
-                    <th>
-                        <a onclick="reorderEvents();">
-                            Time <span class="classEventsOrder"></span>
-                        </a>
-                    </th>  
-                    <th>SessionId / VisitorId</th>
-                    <th>Event</th> 
-                    <th>Field</th>
-                    <th>Value</th> 
-                    <th>URI</th> 
-                </tr> 
-            </thead> 
-            <tbody id="tableChangeHistoryBody">  
-            </tbody> 
-        </table>
-    </div> <!-- end tab /changeHistory -->
-
-    <div role="tabpanel" class="tab-pane" id="ci360History">
-        <table class="table table-striped"> 
-            <thead> 
-                <tr> 
-                    <th>
-                        <a onclick="reorderEvents();">
-                            Time <span class="classEventsOrder"></span>
-                        </a>
-                    </th>  
-                    <th>Visitor</th>
-                    <th>Event</th>
-                    <th>Details</th> 
-                    <th>Count</th>
-                </tr> 
-            </thead> 
-            <tbody id="tableCi360HistoryBody">  
-            </tbody> 
-        </table>
-    </div> <!-- end tab /ci360History -->
-
-  </div>
-
-</div>
-<!-- tab navigation end -->
+    </div><!-- tab navigation end -->
 
     <script id="configCustomerRow" type="text/x-handlebars-template">
       <tr>
@@ -543,7 +808,23 @@
 ];
 
     var defaultSettingsObject = {
-        "adjustTimestampInMilliseconds":"7200000"
+        "adjustTimestampInMilliseconds":"7200000",
+        "event_load" : true,
+        "eventpara_load" : "event attribution",
+        "event_click" : true,
+        "eventpara_click" : "event attribution",
+        "event_submit" : true,
+        "eventpara_submit" : "event attribution",
+        "event_change" : true,
+        "eventpara_change" : "event attribution",
+        "event_contentchange" : true,
+        "eventpara_contentchange" : "event attribution",
+        "event_IdentityEvent" : true,
+        "eventpara_IdentityEvent" : "event attribution",
+        "event_unload" : false,
+        "event_DOMContentLoaded" : false,
+        "event_spot_change" : false,
+        "event_spot_viewable" : false
     };
 
     var adjustTime = defaultSettingsObject.adjustTimestampInMilliseconds;
@@ -558,7 +839,18 @@
     var sessionHistory = [];
     var demoCustomers = [];
 
-    var relevantEvents = {"load": ["event", "page_title", "referrer", "uri", "^pe_*", "identity"], "click": ["event", "title", "uri", "targetInnerText", "anchor_href", "identity"], "change": ["event", "form\\.f\\.[\\w+|-]+$"], "submit": ["event", "form._h.name","form\\.f\\.[\\w+|-]+$"], "contentchange":["target", "value"], "IdentityEvent":["event", "title", "uri", "identity"]};
+    var relevantEvents = {
+        "unload":           ["event", "page_title", "referrer", "uri", "^pe_*", "identity"],
+        "DOMContentLoaded": ["event", "page_title", "referrer", "uri", "^pe_*", "identity"],
+        "spot_change":      ["event", "page_title", "uri", "^pe_*", "identity", "spot_id", "creative_id", "task_id"],
+        "spot_viewable":    ["event", "page_title", "uri", "^pe_*", "identity", "spot_id", "creative_id", "task_id"],
+        "load":             ["event", "page_title", "referrer", "uri", "^pe_*", "identity","attribution"], 
+        "click":            ["event", "title", "uri", "targetInnerText", "anchor_href", "identity"], 
+        "change":           ["event", "form\\.f\\.[\\w+|-]+$"], 
+        "submit":           ["event", "form._h.name","form\\.f\\.[\\w+|-]+$"], 
+        "contentchange":    ["target", "value"], 
+        "IdentityEvent":    ["event", "title", "uri", "identity"]};
+
     var displayFullDetails = false;
     var eventsOrder = "newLast";
 
@@ -566,14 +858,41 @@
         console.log("item does not exist, will be created");
         localStorage.setItem('CI360Customers', JSON.stringify(exampleCustomerArray));
     } else {
-        demoCustomers = JSON.parse(localStorage.getItem('CI360Customers') ? localStorage.getItem('CI360Customers') : "[]");
+        demoCustomers = loadDemoCustomersFromBrowserStorage();
     }
 
     if (!localStorage.getItem('CI360Settings')) {
         console.log("CI360Settings item does not exist, will be created");
         localStorage.setItem('CI360Settings', JSON.stringify(defaultSettingsObject));
     } else {
-        settingsObject = JSON.parse(localStorage.getItem('CI360Settings') ? localStorage.getItem('CI360Settings') : "{}");
+        console.log("CI360Settings item exist");
+        settingsObject = loadSettingsFromBrowserStorage();
+        if(settingsObject.event_load == undefined) {
+            settingsObject.event_load = true;
+            settingsObject.eventpara_load = "event page_title referrer uri ^pe_* identity attribution";
+        }
+        if(settingsObject.event_click == undefined) {
+            console.log("event click is undefined");
+            settingsObject.event_click = true;
+            settingsObject.eventpara_click = "event page_title referrer uri ^pe_* identity attribution";
+        }
+        if(settingsObject.event_change == undefined) {
+            settingsObject.event_change = true;
+            settingsObject.eventpara_change = "event page_title referrer uri ^pe_* identity attribution";
+        }
+        if(settingsObject.event_submit == undefined) {
+            settingsObject.event_submit = true;
+            settingsObject.eventpara_submit = "event page_title referrer uri ^pe_* identity attribution";
+        }
+        if(settingsObject.event_contentchange == undefined) {
+            settingsObject.event_contentchange = true; 
+            settingsObject.eventpara_contentchange = "event page_title referrer uri ^pe_* identity attribution";
+        }       
+        if(settingsObject.event_IdentityEvent == undefined) {
+            settingsObject.event_IdentityEvent = true;
+            settingsObject.eventpara_IdentityEvent = "event page_title referrer uri ^pe_* identity attribution";
+        }
+        localStorage.setItem('CI360Settings', JSON.stringify(settingsObject));
     }
 
 
@@ -614,7 +933,10 @@
                             + decodeURIComponent(reverseHistory[i]["eventname"]);
 
                     } else {
-                        eventText = "Field Interaction";
+                        var indexFrom = decodeURIComponent(reverseHistory[i].location).lastIndexOf("/")+1;
+                        var field = decodeURIComponent(reverseHistory[i].location).substr(indexFrom);
+                        var value = decodeURIComponent(reverseHistory[i]["form.f."+field]);
+                        eventText = "Field Interaction <br> " + field;
                     }
                 }
                 else if(reverseHistory[i].event == "submit") {
@@ -630,7 +952,13 @@
                     eventText = "Content Changed <br> " + (reverseHistory[i]["newvalue"] ? reverseHistory[i]["newvalue"] : "");
                 } 
                 else if(reverseHistory[i].event == "IdentityEvent") {
-                    eventText = "Customer Login"
+                    eventText = "Identity Event"
+                } 
+                else if (reverseHistory[i].event == "DOMContentLoaded") {
+                    eventText = "DOM Content Loaded";
+                }
+                else {
+                    eventText = reverseHistory[i].event;
                 }
 
 
@@ -707,6 +1035,15 @@
                     eventText = "Identity Event"
                 }
 
+                if(reverseHistory[i].referrer.indexOf("oogle") > 0) {
+                    reverseHistory[i].attribution = "Search";
+                } else if(reverseHistory[i].referrer.indexOf("acebook") > 0) {
+                    reverseHistory[i].attribution = "Social";
+                } else if(reverseHistory[i].referrer == "") {
+                    reverseHistory[i].attribution = "Direct";
+                } else {
+                    reverseHistory[i].attribution = "Direct";
+                }
 
                 var maxTextLength = 50 - (i*5);
 
@@ -766,7 +1103,10 @@
             updateUIAggregatedFields(eventData);
         
             // store event only if it is relevant
-            if(relevantEvents.hasOwnProperty(eventData.event)) {
+
+            if(settingsObject["event_" + eventData.event] == true 
+                || settingsObject["event_" + eventData.event] == undefined) {
+            //if(relevantEvents.hasOwnProperty(eventData.event)) {
                 //console.log(" ----- trackEvent: else2");
 
                 if (settingsObject.adjustTimestampInMilliseconds != undefined) {
@@ -781,7 +1121,11 @@
 
                 eventHistory.push(eventData);
 
+                if (eventData.eventSource == "webmarketing") {
 
+                    prepEventForESP(eventData);
+                    
+                }
 
                 // store onle last 50 events
                 eventHistory = eventHistory.slice(-50);
@@ -851,15 +1195,8 @@
 
     function addEventRow(lastEvent) {
 
-        if (lastEvent.eventSource != undefined && lastEvent.eventSource == 'webmarketing') {
-        } else {
-            //todo
-                $('#tableDetailedHistoryBody').append(htmlTemplates.eventAllRow(lastEvent));
-        }
-
         if ((lastEvent.eventSource != undefined && lastEvent.eventSource == 'webmarketing' )
              || lastEvent.event == "IdentityEvent") {
-            //console.log("webmarketing event: ", lastEvent.event);
              
             lastEvent.eventText = lastEvent.event == "IdentityEvent" ? "Customer Login" : decodeURIComponent(lastEvent.eventname);
             lastEvent.eventname = decodeURIComponent(lastEvent.eventname);
@@ -873,7 +1210,10 @@
         } else if (lastEvent.event == 'change') {
             lastEvent.colorClass = "active";
             $('#tableChangeHistoryBody').append(htmlTemplates.eventChangeRow(lastEvent));
-        }       
+        }   
+
+        //always add all events to the all events tab table
+        $('#tableDetailedHistoryBody').append(htmlTemplates.eventAllRow(lastEvent));    
     }
 
     function loadPreviousEvents() {
@@ -916,7 +1256,7 @@
             if (customer.identity != undefined) {
                 $("#divCustAttr").html("");
                 for (attr in customer) {
-                    if(attr != "identity") {
+                    if(attr != "identity" && attr != "tenant") {
                         $('#divCustAttr').append("<b>" +attr+":</b> "+customer[attr]+"<br/>");
                     }
                 }
@@ -926,17 +1266,34 @@
 
 
     function displayEventDetails(eventId, elem) {
+        settingsObject = loadSettingsFromBrowserStorage();
+        
+        var relevantParameters = {};
+        for (var prop in settingsObject) {
+            if (prop.indexOf("eventpara_") > -1) {
+                relevantParameters[prop.split("eventpara_")[1]] = settingsObject[prop].split(" ");
+                //find add form fields with reg expression
+
+                if (prop == "eventpara_submit" || prop == "eventpara_change") {
+                    relevantParameters[prop.split("eventpara_")[1]].push("form\\.f\\.[\\w+|-]+$");
+                }
+
+                // add standard parameters to show as relevant parameters
+                relevantParameters[prop.split("eventpara_")[1]].push("page_title", "referrer", "uri", "^pe_*" ); 
+            }
+        }
+        console.log("relevantParameters: ", relevantParameters);
+
 
         var eventDetailsSelector = "#eventDetails";
         if (elem != "Modal") {
-            $('#firstEventBubble').removeClass("event-bobble-bold");
-            $('#secoundEventBubble').removeClass("event-bobble-bold");
-            $('#thirdEventBubble').removeClass("event-bobble-bold");
-            $('#fourthEventBubble').removeClass("event-bobble-bold");
-            $('#fifthEventBubble').removeClass("event-bobble-bold");
+            $('#firstEventBubble').removeClass("highlight");
+            $('#secoundEventBubble').removeClass("highlight");
+            $('#thirdEventBubble').removeClass("highlight");
+            $('#fourthEventBubble').removeClass("highlight");
+            $('#fifthEventBubble').removeClass("highlight");
 
-            $(elem).addClass("event-bobble-bold");
-            console.log("make it bold");
+            $(elem).addClass("highlight");
         } else {
             eventDetailsSelector = "#eventDetailsModal";
         }
@@ -946,8 +1303,8 @@
         for(prop in eventHistory[eventId]) {
 
             var isImportant = false;
-            if(relevantEvents.hasOwnProperty(eventHistory[eventId].event)) {
-                for (selector of relevantEvents[eventHistory[eventId].event]) {
+            if(relevantParameters.hasOwnProperty(eventHistory[eventId].event)) {
+                for (selector of relevantParameters[eventHistory[eventId].event]) {
                     var regEx = new RegExp(selector, "g");
                     isImportant = regEx.test(prop);
                     if(isImportant) {
@@ -1031,7 +1388,7 @@
             if (customer.identity != undefined) {
                 $("#divCustAttr").html("");
                 for (attr in customer) {
-                    if(attr != "identity") {
+                    if(attr != "identity" && attr != "tenant") {
                         $('#divCustAttr').append("<b>" +attr+":</b> "+customer[attr]+"<br/>");
                     }
                 }
@@ -1150,8 +1507,9 @@
         if (!localStorage.getItem('CI360Customers')) {
             console.log("item does not exist");
         } else {
-            demoCustomers = JSON.parse(localStorage.getItem('CI360Customers') ? localStorage.getItem('CI360Customers') : "[]");
-            customerString = JSON.stringify(demoCustomers).replace(/,/g,",\n").replace(/{/g,"\n{").replace(/]/g,"\n]");
+            demoCustomers = loadDemoCustomersFromBrowserStorage();
+
+            customerString = JSONstringifyWithLineBreak(demoCustomers);
             $('#textareaCustomers').val(customerString);
 
             $("#configuratorCustomerTbody").html("");
@@ -1162,26 +1520,69 @@
         if (!localStorage.getItem('CI360Settings')) {
             console.log("CI360Settings item does not exist");
         } else {
-            settingsObject = JSON.parse(localStorage.getItem('CI360Settings') ? localStorage.getItem('CI360Settings') : "{}");
-            settingsString = JSON.stringify(settingsObject).replace(/,/g,",\n").replace(/{/g,"{\n").replace(/]/g,"\n]").replace(/}/g,"\n}");
+            settingsObject = loadSettingsFromBrowserStorage();
+            settingsString = JSONstringifyWithLineBreak(settingsObject);
 
-            $('#adjustTimestamp').val(settingsObject.adjustTimestampInMilliseconds);
+            //$('#adjustTimestampInMilliseconds').val(settingsObject.adjustTimestampInMilliseconds);
+
+            for (var prop in settingsObject) {
+                //console.log(" property in settingsObject: " + prop);
+                if (prop.indexOf("event_") > -1) {
+                    // prop enthält "event_" - daher splitten und zweites element [1] nehmen
+                    $('#' + prop.split("event_")[1]).prop("checked",settingsObject[prop]);
+                }
+                else {
+                    $('#' + prop).val(settingsObject[prop]);
+                }
+            }
 
             $('#textareaSettings').val(settingsString);
         }
     }
 
     function displayEmptyCustomerAttributes() {
-        demoCustomers = JSON.parse(localStorage.getItem('CI360Customers') ? localStorage.getItem('CI360Customers') : "[]");
+        demoCustomers = loadDemoCustomersFromBrowserStorage();
 
         $('#divCustAttr').html("");
         for (attr in demoCustomers[0]) {
-            if(attr != "identity") {
+            if(attr != "identity" && attr != "tenant") {
                 $('#divCustAttr').append("<b>" +attr+":</b> ...<br/>");
             }
         }
     }
 
+    function updateLabels() {
+        settingsObject = loadSettingsFromBrowserStorage();
+
+        if (settingsObject.label_history)   $("#tab_label_history").html(settingsObject.label_history); 
+        if (settingsObject.label_events)    $("#tab_label_events").html(settingsObject.label_events); 
+        if (settingsObject.label_clicks)    $("#tab_label_clicks").html(settingsObject.label_clicks); 
+        if (settingsObject.label_fields)    $("#tab_label_fields").html(settingsObject.label_fields);
+        if (settingsObject.label_loads)     $("#tab_label_loads").html(settingsObject.label_loads);
+        if (settingsObject.label_360events) $("#tab_label_360events").html(settingsObject.label_360events);
+        if (settingsObject.label_sessions)  $("#tab_label_sessions").html(settingsObject.label_sessions);
+    }
+
+    function prepEventForESP(eventData) {
+        var espUrl = "http://" + settingsObject.espHost + ":" + settingsObject.espPort 
+                + "/inject/" + settingsObject.espProjectQuery + "/" + settingsObject.espSourceWindow + "?blocksize=1";
+
+        console.log("  send 360 event to ESP: ",espUrl );
+                    
+        var eventObject = eventData;
+        eventObject.eventname = decodeURIComponent(eventObject.eventname);
+        eventObject.page_title = decodeURIComponent(eventObject.page_title);
+
+        //send to ESP Server
+        sendEventToESPProxy("http://dachgpci01.emea.sas.com/ESPServiceAdapter/", espUrl, eventObject).done(
+        function(result) {
+            if (result.search("injected") > 0) {
+                console.log("    ESP Send Success");
+            } else {
+                console.log("    ESP Send Failed");
+            }
+        });
+    }
 
 
     /***** API calls *****/
@@ -1201,6 +1602,24 @@
             type: 'POST',
             data: parameters
         } );
+    }
+
+    function sendEventToESPProxy(proxyUrl, espUrl, eventObject) {
+        if(espUrl == "") {
+            return;
+        }
+
+        espUrl += "?blocksize=1&quiesce=false";
+
+        if(eventObject.opcode == undefined) {
+            eventObject.opcode   = "i";
+        }
+
+        var eventBlock = [[eventObject]];
+        var eventJSON  = JSON.stringify(eventBlock);
+        var proxyRequestData = {espRequestUrl: espUrl, espRequestData: eventJSON};
+
+        return $.post(proxyUrl, proxyRequestData);
     }
     /***** API calls *****/
 
@@ -1285,18 +1704,56 @@
         return customerList;
     } 
 
+    function getSettingsFromUi() {
+        var settings = {};
+
+        $('.settings').map(function() {
+            settings[$(this).attr('id')] = $(this).val().trim();
+        });
+
+        $('.settingsCheckbox').map(function() {
+            settings["event_" + $(this).attr('id')] = $(this).prop("checked");
+
+        });
+
+        return settings;
+    }
+
+    function exportBtnClick(elementName) {
+        $('.exp' + elementName).show();
+        $('.edit' + elementName).hide();
+    }
+
+    function editBtnClick(elementName) {
+        $('.exp' + elementName).hide();
+        $('.edit' + elementName).show();
+    }
+
     function saveConfig() {
         /* create settings object */
-        var settingsObject = {};
-        settingsObject.adjustTimestampInMilliseconds = $('#adjustTimestamp').val();
+        settingsObject = getSettingsFromUi();
+        customerObject = getCustomersFromUi();
         
-        /* create settings and demoCustomer string */
-        var settingsString = JSON.stringify(settingsObject).replace(/,/g,",\n").replace(/{/g,"\n{").replace(/]/g,"\n]");
-        var demoCustomers = JSON.stringify(getCustomersFromUi()).replace(/,/g,",\n").replace(/{/g,"\n{").replace(/]/g,"\n]");
+        //settingsObject.adjustTimestampInMilliseconds = $('#adjustTimestampInMilliseconds').val();
+        console.log("settingsObject: ", settingsObject);
 
         /* store configuration into local browser storage */
-        localStorage.setItem('CI360Customers', demoCustomers);
-        localStorage.setItem('CI360Settings', settingsString);
+        localStorage.setItem('CI360Customers', JSONstringifyWithLineBreak(customerObject));
+        localStorage.setItem('CI360Settings', JSONstringifyWithLineBreak(settingsObject));
+        updateLabels();
+        displayEmptyCustomerAttributes();
+    }
+
+    function loadSettingsFromBrowserStorage() {
+        return JSON.parse(localStorage.getItem('CI360Settings') ? localStorage.getItem('CI360Settings') : "{}");
+    }
+
+    function loadDemoCustomersFromBrowserStorage() {
+        return JSON.parse(localStorage.getItem('CI360Customers') ? localStorage.getItem('CI360Customers') : "[]");
+    }
+
+    function JSONstringifyWithLineBreak(object) {
+        return JSON.stringify(object).replace(/,/g,",\n").replace(/{/g,"\n{").replace(/]/g,"\n]");
     }
 
     /*** Configurator Functions ***/
@@ -1306,6 +1763,7 @@
         
         loadPreviousEvents();
         displayEmptyCustomerAttributes();
+        updateLabels();
 
         window.addEventListener('message', function(event) {
             // The data sent with postMessage is stored in event.data

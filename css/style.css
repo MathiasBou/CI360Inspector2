@@ -61,6 +61,9 @@
     color: black;
 }
 
+.event.submit:hover{
+    box-shadow: 0px 0px 30px #23a127;
+}
 
 #lastEventsDiagram{
     width: 750px;
@@ -76,12 +79,9 @@
     display: table;
 }
 
-.event-bobble:hover{
-    border-width: 3px;
-}
-
 .event-bobble-bold{
-    border-width: 3px;
+    box-shadow: 0px 0px 30px #23a127;
+    /*border-width: 3px;*/
 }
 
 .event-bobble > p{
@@ -93,7 +93,6 @@
     vertical-align: middle;
     text-align: center;
 }
-
 
 
 
@@ -135,51 +134,55 @@
     position: relative;
     height: 200px;
     width: 200px;
-
-    /*border-style: dashed;*/
 }
 
 
 .event-bobble.load{
-    /*background-color: aliceblue;
-    border-color: #75caeb;*/
     background-color: #afdaff;
     border-color: #20a6da;
-    /*border-width: 0px;*/
 }
 
 .event-bobble.click{
-    /*background-color: #ffecd7;
-    border-color: #ff4136;*/
     background-color: #ffdbb4;
     border-color: #ef620a;
-    /*border-width: 0px;*/
 }
 
-
 .event-bobble.change{
-    /*background-color: honeydew;
-    border-color: #23a127;*/
     background-color: #dcf1dc;
     border-color: #23a127;
-    /*border-width: 0px;*/
 }
 
 .event-bobble.submit{
-    /*background-color: rgb(255, 248, 246);
-    border-color: #ff4136;*/
     background-color: rgb(247, 215, 206);
     border-color: #ff4136;
-    /*border-width: 0px;*/
 }
 
 .event-bobble.other{
-    /*background-color: #D8F2F5;
-    border-color: #158cba;*/
     background-color: #c5eaef;
     border-color: #158cba;
-    /*border-width: 0px;*/
 }
+
+/** HOVER and HIGHLIGHT effects **/
+.event-bobble.load:hover, .event-bobble.load.highlight {
+    box-shadow: 0px 0px 30px #20a6da;
+}
+
+.event-bobble.click:hover, .event-bobble.click.highlight{
+    box-shadow: 0px 0px 30px #ef620a;
+}
+
+.event-bobble.change:hover, .event-bobble.change.highlight{
+    box-shadow: 0px 0px 30px #23a127;
+}
+
+.event-bobble.submit:hover, .event-bobble.submit.highlight{
+    box-shadow: 0px 0px 30px #ff4136;
+}
+
+.event-bobble.other:hover, .event-bobble.other.highlight{
+    box-shadow: 0px 0px 30px #158cba;
+}
+
 
 .form-control {height: 25px;}
 
