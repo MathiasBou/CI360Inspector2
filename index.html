@@ -132,7 +132,28 @@
 
             <!-- Settings Panel -->
             <div role="tabpanel" class="tab-pane active" id="settings">
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <br>
+                            <div class="text-center" width="20%">
+                                <button type="button" onclick="exportBtnClick('Settings');" 
+                                        class="btn btn-sm btn-default editSettings">
+                                    <span class="glyphicon glyphicon-download"></span> 
+                                    Export Settings
+                                </button>
+
+                                <button type="button" onclick="editBtnClick('Settings');" 
+                                        class="btn btn-sm btn-default expSettings" style="display:none">
+                                    <span class="glyphicon glyphicon-edit"></span> 
+                                    Edit Settings
+                                </button>
+                            </div>
+                        <br>
+                    </div>
+                </div>
                 
+                <div class="row editSettings">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
@@ -289,6 +310,18 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                <input class="settingsCheckbox" id="jsvarchange" type="checkbox"> jsvarchange
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                <input id="eventpara_jsvarchange" value="" type="text" class="settings form-control">
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <br>
 
@@ -305,6 +338,17 @@
                         </div> 
                     </div>
                 </div>
+                </div><!-- end edit Settings div -->
+
+                <div class="row expSettings" style="display:none">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">    
+                                <textarea readonly id="textareaSettings" type="text" class="form-control" rows="20"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 
             </div> 
             <!-- end tabpanel -->
@@ -313,26 +357,19 @@
             <div role="tabpanel" class="tab-pane" id="esp">
                 
                 <div class="row">
-                    <div class="col-lg-12">
-
-                        <br>
-                                <div class="text-center" width="20%">
-                                    <button type="button" onclick="exportBtnClick('Settings');" 
-                                        class="btn btn-sm btn-default editSettings">
-                                        <span class="glyphicon glyphicon-download"></span> Export Settings
-                                    </button>
-
-                                    <button type="button" onclick="editBtnClick('Settings');" 
-                                        class="btn btn-sm btn-default expSettings" style="display:none">
-                                        <span class="glyphicon glyphicon-edit"></span> Edit Settings
-                                    </button>
-                                </div>
-                        <br>
+                    <br>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5" >
+                                 Enable ESP:
+                            </label>
+                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">  
+                                <input onchange="checkEspDisplaySettings();" class="espCheckbox" id="check_espEnabled" type="checkbox">
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-
-                <div class="row editSettings">
+                    <div id="divEspSettings" style="display:none">
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5" >
@@ -373,16 +410,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="row expSettings" style="display:none">
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">    
-                                <textarea readonly id="textareaSettings" type="text" class="form-control" rows="20"></textarea>
-                            </div>
-                        </div>
-                    </div>
+                    </div><!--end divEspSettings -->
                 </div>
 
             </div> 
@@ -397,7 +425,7 @@
         <div class="modal-footer">
             <div class="row">
                 <div class="col-xs-6">
-                    <p class="text-left">Version 2.0.4 (2017-01-02)</p>
+                    <p class="text-left">Version 2.0.5 (2017-01-05)</p>
                 </div>
 
                 <div class="col-xs-6 ">
@@ -821,6 +849,8 @@
         "eventpara_contentchange" : "event attribution",
         "event_IdentityEvent" : true,
         "eventpara_IdentityEvent" : "event attribution",
+        "event_jsvarchange" : true,
+        "eventpara_jsvarchange" : "name value",
         "event_unload" : false,
         "event_DOMContentLoaded" : false,
         "event_spot_change" : false,
@@ -913,49 +943,56 @@
 
                 if(reverseHistory[i].event == "load") {
                     if (reverseHistory[i].eventSource == "webmarketing") {
-                        eventText = "360 Event </br>" + decodeURIComponent(reverseHistory[i].page_title);
+                        eventText = "<b>360 Event</b></br>" + decodeURIComponent(reverseHistory[i].page_title);
                     } else {
-                        eventText = "View Page </br>" + decodeURIComponent(reverseHistory[i].page_title);
+                        eventText = "<b>View Page</b></br>" + decodeURIComponent(reverseHistory[i].page_title);
                     }
                 }
                 else if(reverseHistory[i].event == "click") {
                     if (reverseHistory[i].eventSource == "webmarketing") {
-                        eventText = "360 Event </br>" 
+                        eventText = "<b>360 Event</b></br>" 
                           + (decodeURIComponent(reverseHistory[i].eventname)).trim().substr(0,15);
                     } else {
-                        eventText = "Click on </br>" 
+                        eventText = "<b>Click on</b></br>" 
                           + (decodeURIComponent(reverseHistory[i].title ? reverseHistory[i].title : reverseHistory[i].targetInnerText)).trim().substr(0,15);
                     }
                 }
                 else if(reverseHistory[i].event == "change") {
                     if (reverseHistory[i].eventSource == "webmarketing") {
-                        eventText = "360 Event </br>" 
+                        eventText = "<b>360 Event</b></br>" 
                             + decodeURIComponent(reverseHistory[i]["eventname"]);
 
                     } else {
                         var indexFrom = decodeURIComponent(reverseHistory[i].location).lastIndexOf("/")+1;
                         var field = decodeURIComponent(reverseHistory[i].location).substr(indexFrom);
                         var value = decodeURIComponent(reverseHistory[i]["form.f."+field]);
-                        eventText = "Field Interaction <br> " + field;
+                        eventText = "<b>Field Interaction</b><br> " + field;
                     }
                 }
                 else if(reverseHistory[i].event == "submit") {
                     if (reverseHistory[i].eventSource == "webmarketing") {
-                        eventText = "360 Event </br>" 
+                        eventText = "<b>360 Event</b> </br>" 
                             + decodeURIComponent(reverseHistory[i]["eventname"]);
                     } else {
-                        eventText = "Form Submit <br/>" + decodeURIComponent(reverseHistory[i]["form._h.name"]);
+                        eventText = "<b>Form Submit</b><br/>" + decodeURIComponent(reverseHistory[i]["form._h.name"]);
                     }
                 }
                 else if(reverseHistory[i].event == "contentchange") {
 
-                    eventText = "Content Changed <br> " + (reverseHistory[i]["newvalue"] ? reverseHistory[i]["newvalue"] : "");
+                    eventText = "<b>Content Changed</b><br> " + (reverseHistory[i]["newvalue"] ? reverseHistory[i]["newvalue"] : "");
                 } 
                 else if(reverseHistory[i].event == "IdentityEvent") {
-                    eventText = "Identity Event"
+                    eventText = "<b>Identity Event</b>";
                 } 
                 else if (reverseHistory[i].event == "DOMContentLoaded") {
-                    eventText = "DOM Content Loaded";
+                    eventText = "<b>DOM Content Loaded</b>";
+                }
+                else if(reverseHistory[i].event == "jsvarchange") {
+                    eventText = "<b>jsvarchange</b></br>";
+                    var jsvar_array = decodeURIComponent(reverseHistory[i]["name"]).split(".");
+                    jsvar_array.forEach(function (elem) {
+                        eventText += elem + "<br>";
+                    });
                 }
                 else {
                     eventText = reverseHistory[i].event;
@@ -1010,6 +1047,8 @@
 
                 var eventText = "";
 
+                reverseHistory[i].uri = decodeURIComponent(reverseHistory[i].uri);
+
                 if(reverseHistory[i].event == "load") {
                     reverseHistory[i].eventText = decodeURIComponent(reverseHistory[i].page_title);
                 }
@@ -1032,7 +1071,11 @@
                     reverseHistory[i].eventText = "Content Changed"; 
                 }
                 else if(reverseHistory[i].event == "IdentityEvent") {
-                    eventText = "Identity Event"
+                    reverseHistory[i].eventText = "Identity Event";
+                } 
+                else if(reverseHistory[i].event == "jsvarchange") {
+                    reverseHistory[i].eventText = "" + decodeURIComponent(reverseHistory[i]["name"])
+                        + " = " + decodeURIComponent(reverseHistory[i]["newvalue"]);
                 }
 
                 if(reverseHistory[i].referrer.indexOf("oogle") > 0) {
@@ -1121,7 +1164,8 @@
 
                 eventHistory.push(eventData);
 
-                if (eventData.eventSource == "webmarketing") {
+                if (eventData.eventSource == "webmarketing" 
+                    && settingsObject.check_espEnabled == true) {
 
                     prepEventForESP(eventData);
                     
@@ -1271,9 +1315,15 @@
         var relevantParameters = {};
         for (var prop in settingsObject) {
             if (prop.indexOf("eventpara_") > -1) {
-                relevantParameters[prop.split("eventpara_")[1]] = settingsObject[prop].split(" ");
-                //find add form fields with reg expression
+                //initialize array
+                relevantParameters[prop.split("eventpara_")[1]] = [];
 
+                //check if first element is empty
+                if (settingsObject[prop].split(" ")[0] != "") {
+                    relevantParameters[prop.split("eventpara_")[1]] = settingsObject[prop].split(" ");
+                }
+
+                //add form fields with reg expression
                 if (prop == "eventpara_submit" || prop == "eventpara_change") {
                     relevantParameters[prop.split("eventpara_")[1]].push("form\\.f\\.[\\w+|-]+$");
                 }
@@ -1282,7 +1332,7 @@
                 relevantParameters[prop.split("eventpara_")[1]].push("page_title", "referrer", "uri", "^pe_*" ); 
             }
         }
-        console.log("relevantParameters: ", relevantParameters);
+        //console.log("relevantParameters: ", relevantParameters);
 
 
         var eventDetailsSelector = "#eventDetails";
@@ -1530,6 +1580,9 @@
                 if (prop.indexOf("event_") > -1) {
                     // prop enthält "event_" - daher splitten und zweites element [1] nehmen
                     $('#' + prop.split("event_")[1]).prop("checked",settingsObject[prop]);
+                } else if (prop.indexOf("check_") > -1) {
+                    // prop enthält "check_" - daher splitten und zweites element [1] nehmen
+                    $('#' + prop).prop("checked",settingsObject[prop]);
                 }
                 else {
                     $('#' + prop).val(settingsObject[prop]);
@@ -1538,6 +1591,7 @@
 
             $('#textareaSettings').val(settingsString);
         }
+        checkEspDisplaySettings();
     }
 
     function displayEmptyCustomerAttributes() {
@@ -1713,7 +1767,10 @@
 
         $('.settingsCheckbox').map(function() {
             settings["event_" + $(this).attr('id')] = $(this).prop("checked");
+        });
 
+        $('.espCheckbox').map(function() {
+            settings[$(this).attr('id')] = $(this).prop("checked");
         });
 
         return settings;
@@ -1756,6 +1813,13 @@
         return JSON.stringify(object).replace(/,/g,",\n").replace(/{/g,"\n{").replace(/]/g,"\n]");
     }
 
+    function checkEspDisplaySettings() {
+        if ($('#check_espEnabled').prop("checked") == true) {
+            $("#divEspSettings").show();
+        } else {
+            $("#divEspSettings").hide();
+        }
+    }
     /*** Configurator Functions ***/
 
 

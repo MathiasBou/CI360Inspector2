@@ -1,3 +1,11 @@
+ 
+#firstEventBubble > p > b,
+#secoundEventBubble > p > b, 
+#thirdEventBubble > p > b, 
+#fourthEventBubble > p > b,
+#fifthEventBubble > p > b {
+    color: dimgrey;
+}
 
 .event.load{
 	border-style: solid;
