@@ -322,14 +322,81 @@
                         </div>
                     </div>
 
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                <input class="settingsCheckbox" id="spot_change" type="checkbox"> spot_change
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                <input id="eventpara_spot_change" value="" type="text" class="settings form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                <input class="settingsCheckbox" id="spot_viewable" type="checkbox"> spot_viewable
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                <input id="eventpara_spot_viewable" value="" type="text" class="settings form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                <input class="settingsCheckbox" id="spot_clicked" type="checkbox"> spot_clicked
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                <input id="eventpara_spot_clicked" value="" type="text" class="settings form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                <input class="settingsCheckbox" id="DOMContentLoaded" type="checkbox"> DOMContentLoaded
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                <input id="eventpara_DOMContentLoaded" value="" type="text" class="settings form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                <input class="settingsCheckbox" id="unload" type="checkbox"> unload
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                <input id="eventpara_unload" value="" type="text" class="settings form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                <input class="settingsCheckbox" id="visibilitychange" type="checkbox"> visibilitychange
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                <input id="eventpara_visibilitychange" value="" type="text" class="settings form-control">
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <br>
-
+<!--
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <input class="settingsCheckbox" id="spot_change" type="checkbox"> spot_change
                                 <input class="settingsCheckbox" id="spot_viewable" type="checkbox"> spot_viewable
+                                <input class="settingsCheckbox" id="spot_clicked" type="checkbox"> spot_clicked
                                 <input class="settingsCheckbox" id="DOMContentLoaded" type="checkbox"> DOMContentLoaded
                                 <input class="settingsCheckbox" id="unload" type="checkbox"> unload
                                 <br>                                
@@ -338,6 +405,7 @@
                         </div> 
                     </div>
                 </div>
+-->
                 </div><!-- end edit Settings div -->
 
                 <div class="row expSettings" style="display:none">
@@ -425,7 +493,7 @@
         <div class="modal-footer">
             <div class="row">
                 <div class="col-xs-6">
-                    <p class="text-left">Version 2.0.5 (2017-01-05)</p>
+                    <p class="text-left">Version 2.0.6 (2017-01-28)</p>
                 </div>
 
                 <div class="col-xs-6 ">
@@ -522,7 +590,13 @@
                     <div class="col-lg-12">
                         
                         <h3>Event History</h3>
-                        <p><a onclick="clearHistory();">(clear history)</a></p>
+                        <!--<p><a onclick="clearHistory();">(clear history)</a></p>-->
+                        <p>
+                            <button onclick="clearHistory();" type="button" class="btn btn-default btn-xs">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                Clear History
+                            </button>
+                        </p>
                     </div>
                 </div>
                 <div class="row">
@@ -553,7 +627,13 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h3>Event Details</h3>
-                        <p><a onclick="toggleFullDetails();">(display/hide all)</a></p>
+                        <!--<p><a onclick="toggleFullDetails();">(display/hide all)</a></p>-->
+                        <p>
+                            <button onclick="toggleFullDetails();" type="button" class="btn btn-default btn-xs">
+                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                                Toggle Event Details
+                            </button>
+                        </p>
                     </div>
                     <div id="eventDetails" class="col-lg-12">
                         Event Details (open)
@@ -854,7 +934,8 @@
         "event_unload" : false,
         "event_DOMContentLoaded" : false,
         "event_spot_change" : false,
-        "event_spot_viewable" : false
+        "event_spot_viewable" : false,
+        "event_spot_clicked" : false
     };
 
     var adjustTime = defaultSettingsObject.adjustTimestampInMilliseconds;
@@ -874,6 +955,7 @@
         "DOMContentLoaded": ["event", "page_title", "referrer", "uri", "^pe_*", "identity"],
         "spot_change":      ["event", "page_title", "uri", "^pe_*", "identity", "spot_id", "creative_id", "task_id"],
         "spot_viewable":    ["event", "page_title", "uri", "^pe_*", "identity", "spot_id", "creative_id", "task_id"],
+        "spot_clicked":     ["event", "page_title", "uri", "^pe_*", "identity", "spot_id", "creative_id", "task_id"],
         "load":             ["event", "page_title", "referrer", "uri", "^pe_*", "identity","attribution"], 
         "click":            ["event", "title", "uri", "targetInnerText", "anchor_href", "identity"], 
         "change":           ["event", "form\\.f\\.[\\w+|-]+$"], 
@@ -995,7 +1077,7 @@
                     });
                 }
                 else {
-                    eventText = reverseHistory[i].event;
+                    eventText = "<b>" + reverseHistory[i].event + "</b>";
                 }
 
 
@@ -1405,6 +1487,7 @@
         updateEventHistoryDiagram();
         updateEventHistoryTable();
         updateSessionHistory();
+        updateCi360HistoryTable();
         clearVisitorProfileFields();
         displayEmptyCustomerAttributes();
     }

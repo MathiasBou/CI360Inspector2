@@ -4,7 +4,8 @@
 // @version      2.0
 // @description  Inspect CI360 events
 // @author       Mathias Bouten
-
+// @include      http*://www.sascompanystore.com/*
+// @include      http*://www.sas.com/*
 
 // @exclude      *inqChat*
 // @exclude      *demdex*
@@ -18,8 +19,8 @@
 (function() {
 
     /* Configuration Here */
-    var inspectorUrl = "http://localhost//CI360Inspector2/";
-    //var inspectorUrl = "http://dachgpci01.emea.sas.com//CI360Inspector2/";
+    //var inspectorUrl = "http://localhost//CI360Inspector2/";
+    var inspectorUrl = "http://dachgpci01.emea.sas.com//CI360Inspector2/";
 
     // PLEASE UPDATE WITH TENANT EXTERNAL ID
     var tenantId = '0455ccd59f000130996b2723';
