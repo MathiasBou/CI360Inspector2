@@ -58,7 +58,7 @@
                 <a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a>
             </li>
             <li role="presentation">
-                <a href="#esp" aria-controls="esp" role="tab" data-toggle="tab">ESP</a>
+                <a href="#esp" aria-controls="esp" role="tab" data-toggle="tab">Integration</a>
             </li>
             <li role="presentation">
                 <a href="#help" aria-controls="help" role="tab" data-toggle="tab">Help</a>
@@ -325,6 +325,17 @@
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
                             <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                <input class="settingsCheckbox" id="jspageerror" type="checkbox"> jspageerror
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                <input id="eventpara_jspageerror" value="" type="text" class="settings form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
                                 <input class="settingsCheckbox" id="spot_change" type="checkbox"> spot_change
                             </label>
                             <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
@@ -479,6 +490,51 @@
                         </div>
                     </div>
                     </div><!--end divEspSettings -->
+
+                    <br><br>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br><br>
+                        <div class="form-group">
+                            <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5" >
+                                 Enable RTDM:
+                            </label>
+                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">  
+                                <input onchange="checkRtdmDisplaySettings();" class="rtdmCheckbox" id="check_rtdmEnabled" 
+                                type="checkbox">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="divRtdmSettings" style="display:none">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5" >
+                                    RTDM Host:
+                                </label>
+                                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">  
+                                  <div class="input-group">
+                                    <span class="input-group-btn">
+                                      <button id="rtdmHostButton" name="rtdmHost" type="button" class="btn" 
+                                          onclick="onValidateRTDMConnection(this)" style="padding-top: 1px;padding-bottom: 1px;">
+                                        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                                      </button>
+                                    </span>
+                                    <input id="rtdmHost" name="rtdmHost" type="text" class="form-control settings" 
+                                      onkeyup="onRtdmHostEnterPress(event, this)" value="sasbap.demo.sas.com">
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5">RTDM Event:</label>
+                                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                  <select id="rtdmEvent" class="rtdmEvent form-control settings">
+                                  </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
             </div> 
@@ -493,7 +549,7 @@
         <div class="modal-footer">
             <div class="row">
                 <div class="col-xs-6">
-                    <p class="text-left">Version 2.0.6 (2017-01-28)</p>
+                    <p class="text-left">Version 2.0.7 (2017-03-01)</p>
                 </div>
 
                 <div class="col-xs-6 ">
@@ -835,7 +891,7 @@
             <td >{{eventTimestamp}}</td>
             <td >{{session}}<br>{{visitor}}</td>
             <td >{{event}}</td> 
-            <td >{{eventText}}<br>{{uri}}</td>
+            <td >{{detailsText}}<br>{{uri}}</td>
             <input type="hidden" name="historyId" value="{{historyId}}">
         </tr>
     </script>
@@ -845,7 +901,7 @@
             <td >{{eventTimestamp}}</td>
             <td >{{session}}<br>{{visitor}}</td>
             <td >{{event}}</td>
-            <td >{{eventText}}<br>{{uri}}</td>
+            <td >{{detailsText}}<br>{{uri}}</td>
             <input type="hidden" name="historyId" value="{{historyId}}">
         </tr>
     </script>
@@ -855,7 +911,7 @@
             <td >{{eventTimestamp}}</td>
             <td >{{session}}<br>{{visitor}}</td>
             <td >{{event}}</td>
-            <td >{{eventText}}<br>{{uri}}</td> 
+            <td >{{detailsText}}<br>{{uri}}</td> 
             <input type="hidden" name="historyId" value="{{historyId}}">
         </tr>
     </script>
@@ -878,6 +934,8 @@
     <script src="js/ext/bootstrap.min.js" type="text/javascript"></script>
     <script src="js/ext/handlebars-4.0.5.min.js" type="text/javascript"></script>
     <script src="js/ext/holder.min.js" type="text/javascript"></script>
+    <script src="js/ext/jstz.min.js"></script>
+    <script src="js/sas_rtdm_esp.minify.js"></script>
     <script src="js/inspector.js" type="text/javascript"></script>
     <script type="text/javascript">
 
@@ -949,6 +1007,7 @@
     var aggrEvents = [];
     var sessionHistory = [];
     var demoCustomers = [];
+    var rtdmEngine = {host: "sasbap.demo.sas.com"};
 
     var relevantEvents = {
         "unload":           ["event", "page_title", "referrer", "uri", "^pe_*", "identity"],
@@ -1022,8 +1081,9 @@
                 var realEventId = ((eventHistory.length - 1) -i );
 
                 var eventText = "";
+                var info = "";
 
-                if(reverseHistory[i].event == "load") {
+                /*if(reverseHistory[i].event == "load") {
                     if (reverseHistory[i].eventSource == "webmarketing") {
                         eventText = "<b>360 Event</b></br>" + decodeURIComponent(reverseHistory[i].page_title);
                     } else {
@@ -1035,8 +1095,9 @@
                         eventText = "<b>360 Event</b></br>" 
                           + (decodeURIComponent(reverseHistory[i].eventname)).trim().substr(0,15);
                     } else {
+                        var clickedItem = (decodeURIComponent(reverseHistory[i].title ? reverseHistory[i].title : reverseHistory[i].targetInnerText)).trim().substr(0,15);
                         eventText = "<b>Click on</b></br>" 
-                          + (decodeURIComponent(reverseHistory[i].title ? reverseHistory[i].title : reverseHistory[i].targetInnerText)).trim().substr(0,15);
+                          + clickedItem;
                     }
                 }
                 else if(reverseHistory[i].event == "change") {
@@ -1079,11 +1140,12 @@
                 else {
                     eventText = "<b>" + reverseHistory[i].event + "</b>";
                 }
+                */
 
 
                 var maxTextLength = 50 - (i*5);
 
-                $(cssSelector).html("<p>" + eventText.substr(0,maxTextLength) + "</p>");
+                $(cssSelector).html("<p>" + reverseHistory[i].eventText.substr(0,maxTextLength) + "</p>");
                 $(cssSelector).attr("onclick", "displayEventDetails(" + realEventId + ",this);" );
                     
             }
@@ -1108,6 +1170,99 @@
         updateCi360HistoryTable();
     }
 
+    function addEventAttributes(eventData) {
+
+        if(eventData.event == "load") {
+            var pageTitle = decodeURIComponent(eventData.page_title);
+            //eventData.eventText = pageTitle;
+            if (eventData.eventSource == "webmarketing") {
+                eventData.eventText = "<b>360 Event</b></br>" + decodeURIComponent(eventData["eventname"]);
+            } else {
+                eventData.eventText = "<b>View Page</b></br>" + pageTitle;
+            }                   
+            eventData.info = "Page viewed " + pageTitle;
+        }
+        else if(eventData.event == "click") {
+            var clickedItem = (decodeURIComponent(eventData.title ? eventData.title : eventData.targetInnerText)).trim().substr(0,30);
+            //eventData.eventText = clickedItem;
+            if (eventData.eventSource == "webmarketing") {
+                eventData.eventText = "<b>360 Event</b></br>" 
+                          + (decodeURIComponent(eventData.eventname)).trim().substr(0,15);
+            } else {
+                eventData.eventText = "<b>Click on</b></br>" + clickedItem;
+            }
+            eventData.info = "Clicked on " + eventData.anchor_href.substr(0,eventData.anchor_href.indexOf('.'));
+        }
+        else if(eventData.event == "change") {
+            eventData.eventText = decodeURIComponent(eventData.location);
+            var indexFrom = eventData.eventText.lastIndexOf("/")+1;
+            eventData.eventField = eventData.eventText.substr(indexFrom);
+            eventData.eventValue = decodeURIComponent(eventData["form.f."+eventData.eventField]);
+            //eventData.eventText = eventData.eventText.substr(indexFrom);
+            if (eventData.eventSource == "webmarketing") {
+                eventData.eventText = "<b>360 Event</b></br>" + decodeURIComponent(eventData["eventname"]);
+            } else {
+                eventData.eventText = "<b>Field Interaction</b></br> " + eventData.eventField;
+            }
+            eventData.info = "Entered value " + eventData.eventValue + " in field " + eventData.eventField;
+        }
+        else if(eventData.event == "submit") {
+            var form_id = decodeURIComponent(eventData["form._h.id"]);
+            var form_name = decodeURIComponent(eventData["form._h.name"]);
+            console.log("form_name:",form_name);
+            //eventData.eventText = "Form Id: " + form_id +", Form Name: " + form_name;
+            if (eventData.eventSource == "webmarketing") {
+                eventData.eventText = "<b>360 Event</b> </br>" 
+                            + decodeURIComponent(eventData["eventname"]);
+            } else {
+                eventData.eventText = "<b>Form Submit</b></br>" + decodeURIComponent(eventData["form._h.name"]);
+            }
+            if (form_name != "") {
+                eventData.info = "Submitted form (name) " + form_name;
+            } else {
+                eventData.info = "Submitted form (id) " + form_id;
+            }
+        }
+        else if(eventData.event == "contentchange") { 
+            eventData.eventText = "<b>Content Changed</b><br> " + (eventData["newvalue"] ? eventData["newvalue"] : "");
+            eventData.info = "Content changed " + (eventData["newvalue"] ? eventData["newvalue"] : "");
+        }
+        else if(eventData.event == "IdentityEvent") {
+            eventData.eventText = "<b>Identity Event</b>";
+            eventData.info = "Customer Login / Identity Event";
+        } 
+        else if (eventData.event == "DOMContentLoaded") {
+            eventData.eventText = "<b>DOM Content Loaded</b>";
+        }
+        else if(eventData.event == "jsvarchange") {
+            var jsvar_name = decodeURIComponent(eventData["name"]);
+            var jsvar_value = decodeURIComponent(eventData["newvalue"]);
+            //eventData.eventText = "" + jsvar_name + " = " + jsvar_value;
+            eventData.info = "Variable " + jsvar_name + " changed to value: " + jsvar_value;
+            eventData.eventText = "<b>jsvarchange</b></br>";
+            var jsvar_array = decodeURIComponent(eventData["name"]).split(".");
+            jsvar_array.forEach(function (elem) {
+                eventData.eventText += elem + "<br>";
+            });
+        }
+        else {
+            eventData.eventText = "<b>" + eventData.event + "</b>";
+        }
+
+        if(eventData.referrer.indexOf("oogle") > 0) {
+            eventData.attribution = "Search";
+        } else if(eventData.referrer.indexOf("acebook") > 0) {
+            eventData.attribution = "Social";
+        } else if(eventData.referrer == "") {
+            eventData.attribution = "Direct";
+        } else {
+            eventData.attribution = "Direct";
+        }
+
+        eventData.detailsText = eventData.eventText.replace(/<b>/g,"").replace(/<\/b>/g,"").replace(/<\/br>/g,": ");
+
+        return eventData;
+    }
 
     function updateEventHistoryTable() {
         var reverseHistory = eventHistory.slice(-50);
@@ -1131,11 +1286,15 @@
 
                 reverseHistory[i].uri = decodeURIComponent(reverseHistory[i].uri);
 
-                if(reverseHistory[i].event == "load") {
-                    reverseHistory[i].eventText = decodeURIComponent(reverseHistory[i].page_title);
+                /*if(reverseHistory[i].event == "load") {
+                    var pageTitle = decodeURIComponent(reverseHistory[i].page_title);
+                    reverseHistory[i].eventText = pageTitle;                   
+                    reverseHistory[i].info = "Page viewed " + pageTitle;
                 }
                 else if(reverseHistory[i].event == "click") {
-                    reverseHistory[i].eventText = (decodeURIComponent(reverseHistory[i].title ? reverseHistory[i].title : reverseHistory[i].targetInnerText)).trim().substr(0,30);
+                    var clickedItem = (decodeURIComponent(reverseHistory[i].title ? reverseHistory[i].title : reverseHistory[i].targetInnerText)).trim().substr(0,30);
+                    reverseHistory[i].eventText = clickedItem;
+                    reverseHistory[i].info = "Clicked on " + reverseHistory[i].anchor_href.substr(0,reverseHistory[i].anchor_href.indexOf('.'));
                 }
                 else if(reverseHistory[i].event == "change") {
                     reverseHistory[i].eventText = decodeURIComponent(reverseHistory[i].location);
@@ -1145,30 +1304,32 @@
                     reverseHistory[i].eventField = field;
                     reverseHistory[i].eventValue = value;
                     reverseHistory[i].eventText = field;
+
+                    reverseHistory[i].info = "Entered value " + value + " in field " + field;
                 }
                 else if(reverseHistory[i].event == "submit") {
-                    reverseHistory[i].eventText = "Form Id: " + decodeURIComponent(reverseHistory[i]["form._h.id"]) +", Form Name: " + decodeURIComponent(reverseHistory[i]["form._h.name"]);
+                    var form_id = decodeURIComponent(reverseHistory[i]["form._h.id"]);
+                    var form_name = decodeURIComponent(reverseHistory[i]["form._h.name"]);
+                    reverseHistory[i].eventText = "Form Id: " + form_id +", Form Name: " + form_name;
+
+                    reverseHistory[i].info = "Submitted form " + form_name;
                 }
                 else if(reverseHistory[i].event == "contentchange") {
                     reverseHistory[i].eventText = "Content Changed"; 
+                    reverseHistory[i].info = "Content changed";
                 }
                 else if(reverseHistory[i].event == "IdentityEvent") {
                     reverseHistory[i].eventText = "Identity Event";
+                    reverseHistory[i].info = "Customer Login / Identity Event";
                 } 
                 else if(reverseHistory[i].event == "jsvarchange") {
-                    reverseHistory[i].eventText = "" + decodeURIComponent(reverseHistory[i]["name"])
-                        + " = " + decodeURIComponent(reverseHistory[i]["newvalue"]);
-                }
+                    var jsvar_name = decodeURIComponent(reverseHistory[i]["name"]);
+                    var jsvar_value = decodeURIComponent(reverseHistory[i]["newvalue"]);
+                    reverseHistory[i].eventText = "" + jsvar_name + " = " + jsvar_value;
+                    reverseHistory[i].info = "Variable " + jsvar_name + " changed to value: " + jsvar_value;
+                }*/
 
-                if(reverseHistory[i].referrer.indexOf("oogle") > 0) {
-                    reverseHistory[i].attribution = "Search";
-                } else if(reverseHistory[i].referrer.indexOf("acebook") > 0) {
-                    reverseHistory[i].attribution = "Social";
-                } else if(reverseHistory[i].referrer == "") {
-                    reverseHistory[i].attribution = "Direct";
-                } else {
-                    reverseHistory[i].attribution = "Direct";
-                }
+                
 
                 var maxTextLength = 50 - (i*5);
 
@@ -1241,6 +1402,7 @@
 
                 
                 checkAndUpdateSession(eventData);
+                eventData = addEventAttributes(eventData);
 
                 eventData.historyId = eventHistory.length;
 
@@ -1250,6 +1412,12 @@
                     && settingsObject.check_espEnabled == true) {
 
                     prepEventForESP(eventData);
+                    
+                }
+
+                if (settingsObject.check_rtdmEnabled == true) {
+
+                    prepEventForRTDM(eventData);
                     
                 }
 
@@ -1434,17 +1602,19 @@
         var resultHtml = "<table class=\"table table-striped\">";
         for(prop in eventHistory[eventId]) {
 
-            var isImportant = false;
-            if(relevantParameters.hasOwnProperty(eventHistory[eventId].event)) {
-                for (selector of relevantParameters[eventHistory[eventId].event]) {
-                    var regEx = new RegExp(selector, "g");
-                    isImportant = regEx.test(prop);
-                    if(isImportant) {
-                        break;
+            if (prop != "eventText" && prop != "detailsText") { //dont show eventText parameter
+                var isImportant = false;
+                if(relevantParameters.hasOwnProperty(eventHistory[eventId].event)) {
+                    for (selector of relevantParameters[eventHistory[eventId].event]) {
+                        var regEx = new RegExp(selector, "g");
+                        isImportant = regEx.test(prop);
+                        if(isImportant) {
+                            break;
+                        }
                     }
                 }
+                resultHtml += "<tr class=\"" + (isImportant ? "highlighted" : "details") + "\" ><td>" + prop + " </td>  <td><pre>" + decodeURIComponent(eventHistory[eventId][prop]) + "</pre></td> </tr>";
             }
-            resultHtml += "<tr class=\"" + (isImportant ? "highlighted" : "details") + "\" ><td>" + prop + " </td>  <td><pre>" + decodeURIComponent(eventHistory[eventId][prop]) + "</pre></td> </tr>";
         }
 
         resultHtml +="</table>";
@@ -1675,6 +1845,7 @@
             $('#textareaSettings').val(settingsString);
         }
         checkEspDisplaySettings();
+        checkRtdmDisplaySettings();
     }
 
     function displayEmptyCustomerAttributes() {
@@ -1718,6 +1889,29 @@
             } else {
                 console.log("    ESP Send Failed");
             }
+        });
+    }
+
+    function prepEventForRTDM(eventData) {
+        //var eventObject = eventData;
+        
+        eventData.eventname = decodeURIComponent(eventData.eventname);
+        eventData.page_title = decodeURIComponent(eventData.page_title);
+        eventData.referrer = decodeURIComponent(eventData.referrer);
+        var rtdmRequestInputs = eventData; 
+        var stringcustid = getCustomer(eventData.identity).customerid ? getCustomer(eventData.identity).customerid : "0";  
+        var customerid = parseInt(stringcustid);
+           
+            rtdmRequestInputs['customerid'] = customerid;
+        
+
+        console.log("  send 360 event to RTDM: ", rtdmRequestInputs);
+        
+        sendRequestToRTDM(rtdmEngine.host, settingsObject.rtdmEvent, rtdmRequestInputs).success(
+            function (response) {
+                console.log("    RTDM Send Success");
+            }).error(function (response) {
+                console.log("    RTDM Send Failed");
         });
     }
 
@@ -1845,7 +2039,7 @@
         var settings = {};
 
         $('.settings').map(function() {
-            settings[$(this).attr('id')] = $(this).val().trim();
+            settings[$(this).attr('id')] = $(this).val() ? $(this).val().trim() : "";
         });
 
         $('.settingsCheckbox').map(function() {
@@ -1853,6 +2047,10 @@
         });
 
         $('.espCheckbox').map(function() {
+            settings[$(this).attr('id')] = $(this).prop("checked");
+        });
+
+        $('.rtdmCheckbox').map(function() {
             settings[$(this).attr('id')] = $(this).prop("checked");
         });
 
@@ -1902,6 +2100,54 @@
         } else {
             $("#divEspSettings").hide();
         }
+    }
+
+    function checkRtdmDisplaySettings() {
+        if ($('#check_rtdmEnabled').prop("checked") == true) {
+            $("#divRtdmSettings").show();
+        } else {
+            $("#divRtdmSettings").hide();
+        }
+
+        option = "<option value='"+ settingsObject['rtdmEvent'] + "'>" + settingsObject['rtdmEvent'] +"</option>";
+        $('#rtdmEvent').append(option);
+    }
+
+    function onRtdmHostEnterPress(e, elem) {
+        if (e.keyCode == 13) {
+            onValidateRTDMConnection(elem);
+        }
+    }
+
+    function onValidateRTDMConnection(elem) {
+        rtdmEngine.host = $("#rtdmHost").val();
+
+        var jqElem = $('#' +elem.name+'Button');
+        jqElem.removeClass("btn-green");
+        jqElem.removeClass("btn-fail");
+
+        queryRTDMEvents(rtdmEngine, updateRTDMEventSelections).success(function (elem) {
+            jqElem.addClass("btn-green");
+            //$('.rtdmEvent').val(settingsObject.rtdmEvent);
+        }).error(function (elem) {
+            jqElem.addClass("btn-fail");
+            $('.rtdmEvent').html("");
+            $('.rtdmEvent').val(settingsObject.rtdmEvent);
+        });
+    }
+
+    function updateRTDMEventSelections() {    
+        var options = "<option> -- Select Event -- </option>";
+        for(event of rtdmEngine.events) {
+            if (!event.decisionId.startsWith("TS_") &&
+                 !event.decisionId.startsWith("AE_") &&
+                  !event.decisionId.startsWith("_SAS") ) {
+
+                options += "<option value='"+ event.decisionId + "'>" + event.decisionId +"</option>";
+            }
+        }
+        $('.rtdmEvent').html(options);
+        $('.rtdmEvent').val(settingsObject.rtdmEvent);
     }
     /*** Configurator Functions ***/
 
