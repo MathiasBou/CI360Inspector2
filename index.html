@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>CI360 Event Inspector</title>
+    <link rel="shortcut icon" href="images/inspector.jpg" />
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -51,13 +52,13 @@
             
         
           <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" >
+            <li role="presentation" class="extra">
                 <a href="#demoCustomers" aria-controls="demoCustomers" role="tab" data-toggle="tab">Demo Customers</a>
             </li>
             <li role="presentation" class="active">
                 <a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a>
             </li>
-            <li role="presentation">
+            <li role="presentation" class="extra">
                 <a href="#esp" aria-controls="esp" role="tab" data-toggle="tab">Integration</a>
             </li>
             <li role="presentation">
@@ -325,6 +326,17 @@
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
                             <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                <input class="settingsCheckbox" id="media" type="checkbox"> media
+                            </label>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                <input id="eventpara_media" value="" type="text" class="settings form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
                                 <input class="settingsCheckbox" id="jspageerror" type="checkbox"> jspageerror
                             </label>
                             <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
@@ -434,8 +446,17 @@
 
             <!-- Settings Panel -->
             <div role="tabpanel" class="tab-pane" id="esp">
-                
+
                 <div class="row">
+                    <div class="col-lg-12">
+                        <h4 class="text-center"> Demo On-Premise Agent</h4>
+                        <p class="text-center">
+                            This gives you the possibility to demo the integration with on-premise products like RTDM. You can use RTDM to track CI360 events in real time into database tables which are accessible by Advisor Frontends as well as calling a specific RTDM flow for a specific CI360 Engage Event.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="row" style="display:none">
                     <br>
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
@@ -447,7 +468,9 @@
                             </div>
                         </div>
                     </div>
+                </div><!--end row-->
 
+                <div class="row">
                     <div id="divEspSettings" style="display:none">
                     <div class="col-lg-12">
                         <div class="form-group">
@@ -490,21 +513,34 @@
                         </div>
                     </div>
                     </div><!--end divEspSettings -->
-
-                    <br><br>
+                </div><!--end row-->
+                
+                <div class="row">
+                    
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <br><br>
+                        <br>
                         <div class="form-group">
-                            <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5" >
+                            <label class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
                                  Enable RTDM:
                             </label>
-                            <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">  
+                            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">  
                                 <input onchange="checkRtdmDisplaySettings();" class="rtdmCheckbox" id="check_rtdmEnabled" 
                                 type="checkbox">
                             </div>
                         </div>
                     </div>
+                </div><!--end row-->
+                
+                
                     <div id="divRtdmSettings" style="display:none">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <p class="text-center">
+                                <br>Define the RTDM host (race server name or ip address), then click on the refresh icon. When it turns green select the RTDM Event which should track the CI360 events in real time. 
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5" >
@@ -524,18 +560,92 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-lg-12">                           
+                            <p class="text-center">
+                                <br><br>Specify RTDM Event to track CI360 collected events into a database table. This table can be used by an advisor frontend to understand customer web behavior.
+                            </p>
+                        </div>
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5">RTDM Event:</label>
+                                <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5">RTDM Event to track all events:</label>
                                 <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
                                   <select id="rtdmEvent" class="rtdmEvent form-control settings">
                                   </select>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div><!--end row-->
+                
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <p class="text-center">
+                                <br>Specify RTDM Event to be called if certain CI360 Engage Events occur
+                            </p>
+                        </div>
 
-                </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+                                    If CI360 Engage eventname contains the word "Telegram" or "SMS"...
+                                </label>
+                                <!--<div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">    
+                                    <input id="CI360EventForRtdmEvent" type="text" class="settings form-control">  
+                                </div>-->
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="col-lg-5 col-md-5 col-sm-5 col-xs-5">...then call RTDM Event:</label>
+                                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                                  <select id="rtdmEventForCI360Event" class="rtdmEvent form-control settings">
+                                  </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--end row-->
+                
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <p class="text-center">
+                                <br>Provide a message template for RTDM Event. You can use demo customer attributes as variables enclosed in double brackets ((attribute)). 
+                                Note: You need to have an attribute called "Mobile" to be able to send an SMS as well as an attribute called "TelegramId" to be able to send a telegram message. Attribute names are case sensitive, look on the demo customers tab!
+                            </p>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                    Message Template:
+                                </label>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                    <textarea rows="4" id="messageTemplate" type="text" class="settings form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="col-lg-4 col-md-4 col-sm-4 col-xs-4" >
+                                    Channel:
+                                </label>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">    
+                                    <input id="channel" type="text" class="settings form-control">  
+                                </div>
+                            </div>
+                        </div>-->
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+                                    If channel is Telegram, then you can send an image as well. Url to image:
+                                </label>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">    
+                                    <input id="telegramImage" type="text" class="settings form-control">  
+                                </div>
+                            </div>
+                        </div>
+
+                    </div><!-- end row -->
+
+                </div><!--end RTDM settings -->
 
             </div> 
             <!-- end tabpanel -->
@@ -549,7 +659,7 @@
         <div class="modal-footer">
             <div class="row">
                 <div class="col-xs-6">
-                    <p class="text-left">Version 2.0.7 (2017-03-01)</p>
+                    <p class="text-left">Version 2.0.9 (2017-05-19)</p>
                 </div>
 
                 <div class="col-xs-6 ">
@@ -940,13 +1050,32 @@
     <script type="text/javascript">
 
     var exampleCustomerArray = [
+
+{"identity":"1",
+"Name":"",
+"Email":"",
+"Age":"",
+"Gender":"",
+"Segment":""},
+
+{"identity":"c2be3581-b8cb-343c-ae79-b14e0432e863",
+"Name":"Ioannis Stavridis",
+"Email":"ioannis.stavridis@sas.com",
+"tenant":"Demo",
+"Gender":"male",
+"Segment":"Family",
+"customerid":"2239",
+"Mobile":"491735755021",
+"TelegramId":"10885975"},
+
 {"identity":"761d434c-1a7c-4af4-89ea-23c70e477bd1",
 "Name":"Mathias Bouten",
 "Email":"mathias.bouten@sas.com",
 "Age":"36",
 "Gender":"Male",
 "Segment":"Small-Family",
-"Score":"77"},
+"Score":"77",
+"tenant":"Playpen/Demo"},
 
 {"identity":"08ee2c6f-47e0-3ccd-a21e-3241662de4bc",
 "Name":"Mathias Bouten",
@@ -954,7 +1083,11 @@
 "Age":"36",
 "Gender":"Male",
 "Segment":"Small-Family",
-"Score":"77"},
+"Score":"77",
+"tenant":"Finance",
+"customerid":"2235",
+"Mobile":"491735755021",
+"TelegramId":"10885975"},
 
 {"identity":"c6a4ff06-1e8d-44df-9867-bfac85931692",
 "Name":"Rob Sneath",
@@ -989,11 +1122,18 @@
         "eventpara_IdentityEvent" : "event attribution",
         "event_jsvarchange" : true,
         "eventpara_jsvarchange" : "name value",
+        "event_jspageerror" : false,
+        "eventpara_jspageerror" : "",
+        "event_media" : true,
+        "eventpara_media" : "media player",
         "event_unload" : false,
         "event_DOMContentLoaded" : false,
         "event_spot_change" : false,
         "event_spot_viewable" : false,
-        "event_spot_clicked" : false
+        "event_spot_clicked" : false,
+        "messageTemplate": "Hi ((Name))! Your gender is ((Gender)) and you are in segment ((Segment)). We will send more information to your email ((Email)).",
+        "rtdmHost": "racesx07016.demo.sas.com",
+        "rtdmEvent": "CI360_Events"
     };
 
     var adjustTime = defaultSettingsObject.adjustTimestampInMilliseconds;
@@ -1081,71 +1221,18 @@
                 var realEventId = ((eventHistory.length - 1) -i );
 
                 var eventText = "";
-                var info = "";
-
-                /*if(reverseHistory[i].event == "load") {
-                    if (reverseHistory[i].eventSource == "webmarketing") {
-                        eventText = "<b>360 Event</b></br>" + decodeURIComponent(reverseHistory[i].page_title);
-                    } else {
-                        eventText = "<b>View Page</b></br>" + decodeURIComponent(reverseHistory[i].page_title);
-                    }
-                }
-                else if(reverseHistory[i].event == "click") {
-                    if (reverseHistory[i].eventSource == "webmarketing") {
-                        eventText = "<b>360 Event</b></br>" 
-                          + (decodeURIComponent(reverseHistory[i].eventname)).trim().substr(0,15);
-                    } else {
-                        var clickedItem = (decodeURIComponent(reverseHistory[i].title ? reverseHistory[i].title : reverseHistory[i].targetInnerText)).trim().substr(0,15);
-                        eventText = "<b>Click on</b></br>" 
-                          + clickedItem;
-                    }
-                }
-                else if(reverseHistory[i].event == "change") {
-                    if (reverseHistory[i].eventSource == "webmarketing") {
-                        eventText = "<b>360 Event</b></br>" 
-                            + decodeURIComponent(reverseHistory[i]["eventname"]);
-
-                    } else {
-                        var indexFrom = decodeURIComponent(reverseHistory[i].location).lastIndexOf("/")+1;
-                        var field = decodeURIComponent(reverseHistory[i].location).substr(indexFrom);
-                        var value = decodeURIComponent(reverseHistory[i]["form.f."+field]);
-                        eventText = "<b>Field Interaction</b><br> " + field;
-                    }
-                }
-                else if(reverseHistory[i].event == "submit") {
-                    if (reverseHistory[i].eventSource == "webmarketing") {
-                        eventText = "<b>360 Event</b> </br>" 
-                            + decodeURIComponent(reverseHistory[i]["eventname"]);
-                    } else {
-                        eventText = "<b>Form Submit</b><br/>" + decodeURIComponent(reverseHistory[i]["form._h.name"]);
-                    }
-                }
-                else if(reverseHistory[i].event == "contentchange") {
-
-                    eventText = "<b>Content Changed</b><br> " + (reverseHistory[i]["newvalue"] ? reverseHistory[i]["newvalue"] : "");
-                } 
-                else if(reverseHistory[i].event == "IdentityEvent") {
-                    eventText = "<b>Identity Event</b>";
-                } 
-                else if (reverseHistory[i].event == "DOMContentLoaded") {
-                    eventText = "<b>DOM Content Loaded</b>";
-                }
-                else if(reverseHistory[i].event == "jsvarchange") {
-                    eventText = "<b>jsvarchange</b></br>";
-                    var jsvar_array = decodeURIComponent(reverseHistory[i]["name"]).split(".");
-                    jsvar_array.forEach(function (elem) {
-                        eventText += elem + "<br>";
-                    });
-                }
-                else {
-                    eventText = "<b>" + reverseHistory[i].event + "</b>";
-                }
-                */
-
+                //var info = "";
 
                 var maxTextLength = 50 - (i*5);
 
-                $(cssSelector).html("<p>" + reverseHistory[i].eventText.substr(0,maxTextLength) + "</p>");
+                // only to cover previous versions of Event Inspector
+                if (reverseHistory[i].eventText !== undefined) {
+                    eventText = reverseHistory[i].eventText.substr(0,maxTextLength);
+                } else {
+                    eventText = reverseHistory[i].event;
+                }
+
+                $(cssSelector).html("<p>" + eventText + "</p>");
                 $(cssSelector).attr("onclick", "displayEventDetails(" + realEventId + ",this);" );
                     
             }
@@ -1172,39 +1259,51 @@
 
     function addEventAttributes(eventData) {
 
-        if(eventData.event == "load") {
+        if(eventData.event == "media") {
             var pageTitle = decodeURIComponent(eventData.page_title);
-            //eventData.eventText = pageTitle;
             if (eventData.eventSource == "webmarketing") {
                 eventData.eventText = "<b>360 Event</b></br>" + decodeURIComponent(eventData["eventname"]);
+                eventData.info = "Media Goal: " + decodeURIComponent(eventData["eventname"]);
+            } else {
+                eventData.eventText = "<b>Media</b></br>" + eventData.media_action;
+                eventData.info = "Media viewed on " + pageTitle;
+            }                   
+            
+        } else if(eventData.event == "load") {
+            var pageTitle = decodeURIComponent(eventData.page_title);
+            if (eventData.eventSource == "webmarketing") {
+                eventData.eventText = "<b>360 Event</b></br>" + decodeURIComponent(eventData["eventname"]);
+                eventData.info = "Load Goal: " + decodeURIComponent(eventData["eventname"]);
             } else {
                 eventData.eventText = "<b>View Page</b></br>" + pageTitle;
+                eventData.info = "Page viewed " + pageTitle;
             }                   
-            eventData.info = "Page viewed " + pageTitle;
+            
         }
         else if(eventData.event == "click") {
             var clickedItem = (decodeURIComponent(eventData.title ? eventData.title : eventData.targetInnerText)).trim().substr(0,30);
-            //eventData.eventText = clickedItem;
             if (eventData.eventSource == "webmarketing") {
                 eventData.eventText = "<b>360 Event</b></br>" 
                           + (decodeURIComponent(eventData.eventname)).trim().substr(0,15);
+                eventData.info = "Click Goal: " + decodeURIComponent(eventData["eventname"]);
             } else {
                 eventData.eventText = "<b>Click on</b></br>" + clickedItem;
-            }
-            eventData.info = "Clicked on " + eventData.anchor_href.substr(0,eventData.anchor_href.indexOf('.'));
+                eventData.info = "Clicked on " + clickedItem;
+            } 
         }
         else if(eventData.event == "change") {
             eventData.eventText = decodeURIComponent(eventData.location);
             var indexFrom = eventData.eventText.lastIndexOf("/")+1;
             eventData.eventField = eventData.eventText.substr(indexFrom);
             eventData.eventValue = decodeURIComponent(eventData["form.f."+eventData.eventField]);
-            //eventData.eventText = eventData.eventText.substr(indexFrom);
             if (eventData.eventSource == "webmarketing") {
                 eventData.eventText = "<b>360 Event</b></br>" + decodeURIComponent(eventData["eventname"]);
+                eventData.info = "Change Goal: " + decodeURIComponent(eventData["eventname"]);
             } else {
                 eventData.eventText = "<b>Field Interaction</b></br> " + eventData.eventField;
+                eventData.info = "Entered value " + eventData.eventValue + " in field " + eventData.eventField;
             }
-            eventData.info = "Entered value " + eventData.eventValue + " in field " + eventData.eventField;
+            
         }
         else if(eventData.event == "submit") {
             var form_id = decodeURIComponent(eventData["form._h.id"]);
@@ -1212,16 +1311,16 @@
             console.log("form_name:",form_name);
             //eventData.eventText = "Form Id: " + form_id +", Form Name: " + form_name;
             if (eventData.eventSource == "webmarketing") {
-                eventData.eventText = "<b>360 Event</b> </br>" 
-                            + decodeURIComponent(eventData["eventname"]);
+                eventData.eventText = "<b>360 Event</b> </br>" + decodeURIComponent(eventData["eventname"]);
+                eventData.info = "Submit Goal: " + decodeURIComponent(eventData["eventname"]);
             } else {
                 eventData.eventText = "<b>Form Submit</b></br>" + decodeURIComponent(eventData["form._h.name"]);
-            }
-            if (form_name != "") {
-                eventData.info = "Submitted form (name) " + form_name;
-            } else {
-                eventData.info = "Submitted form (id) " + form_id;
-            }
+                if (form_name != "") {
+                    eventData.info = "Submitted form (name) " + form_name;
+                } else {
+                    eventData.info = "Submitted form (id) " + form_id;
+                }
+            } 
         }
         else if(eventData.event == "contentchange") { 
             eventData.eventText = "<b>Content Changed</b><br> " + (eventData["newvalue"] ? eventData["newvalue"] : "");
@@ -1259,6 +1358,7 @@
             eventData.attribution = "Direct";
         }
 
+        // remove the bold tag and create detailsText attribute for use in Title/Uri on the event tabs
         eventData.detailsText = eventData.eventText.replace(/<b>/g,"").replace(/<\/b>/g,"").replace(/<\/br>/g,": ");
 
         return eventData;
@@ -1282,54 +1382,9 @@
                 
                 var realEventId = ((eventHistory.length - 1) -i );
 
-                var eventText = "";
+                //var eventText = "";
 
                 reverseHistory[i].uri = decodeURIComponent(reverseHistory[i].uri);
-
-                /*if(reverseHistory[i].event == "load") {
-                    var pageTitle = decodeURIComponent(reverseHistory[i].page_title);
-                    reverseHistory[i].eventText = pageTitle;                   
-                    reverseHistory[i].info = "Page viewed " + pageTitle;
-                }
-                else if(reverseHistory[i].event == "click") {
-                    var clickedItem = (decodeURIComponent(reverseHistory[i].title ? reverseHistory[i].title : reverseHistory[i].targetInnerText)).trim().substr(0,30);
-                    reverseHistory[i].eventText = clickedItem;
-                    reverseHistory[i].info = "Clicked on " + reverseHistory[i].anchor_href.substr(0,reverseHistory[i].anchor_href.indexOf('.'));
-                }
-                else if(reverseHistory[i].event == "change") {
-                    reverseHistory[i].eventText = decodeURIComponent(reverseHistory[i].location);
-                    var indexFrom = reverseHistory[i].eventText.lastIndexOf("/")+1;
-                    var field = reverseHistory[i].eventText.substr(indexFrom);
-                    var value = decodeURIComponent(reverseHistory[i]["form.f."+field]);
-                    reverseHistory[i].eventField = field;
-                    reverseHistory[i].eventValue = value;
-                    reverseHistory[i].eventText = field;
-
-                    reverseHistory[i].info = "Entered value " + value + " in field " + field;
-                }
-                else if(reverseHistory[i].event == "submit") {
-                    var form_id = decodeURIComponent(reverseHistory[i]["form._h.id"]);
-                    var form_name = decodeURIComponent(reverseHistory[i]["form._h.name"]);
-                    reverseHistory[i].eventText = "Form Id: " + form_id +", Form Name: " + form_name;
-
-                    reverseHistory[i].info = "Submitted form " + form_name;
-                }
-                else if(reverseHistory[i].event == "contentchange") {
-                    reverseHistory[i].eventText = "Content Changed"; 
-                    reverseHistory[i].info = "Content changed";
-                }
-                else if(reverseHistory[i].event == "IdentityEvent") {
-                    reverseHistory[i].eventText = "Identity Event";
-                    reverseHistory[i].info = "Customer Login / Identity Event";
-                } 
-                else if(reverseHistory[i].event == "jsvarchange") {
-                    var jsvar_name = decodeURIComponent(reverseHistory[i]["name"]);
-                    var jsvar_value = decodeURIComponent(reverseHistory[i]["newvalue"]);
-                    reverseHistory[i].eventText = "" + jsvar_name + " = " + jsvar_value;
-                    reverseHistory[i].info = "Variable " + jsvar_name + " changed to value: " + jsvar_value;
-                }*/
-
-                
 
                 var maxTextLength = 50 - (i*5);
 
@@ -1374,8 +1429,16 @@
         
     }
 
+    function addElementToStart(elementName, obj) {
+        var tmpObj = {};
+        if (obj[elementName] != undefined) {
+            tmpObj[elementName] = obj[elementName];
+        }
+        Object.assign(tmpObj,obj);
+        return tmpObj;
+    }
+
     function trackEvent(eventData) {
-        //console.log(" ----- start trackEvent");
 
         if (eventHistory.length > 0 && eventHistory[eventHistory.length-1].event == "IdentityEvent"
             && eventData.event == "IdentityEvent") {
@@ -1402,13 +1465,18 @@
 
                 
                 checkAndUpdateSession(eventData);
-                eventData = addEventAttributes(eventData);
+                updatedEventData = addEventAttributes(eventData);
 
                 eventData.historyId = eventHistory.length;
+                
+                console.log('eventData: ', updatedEventData);
+                updatedEventData = addElementToStart('eventname', updatedEventData);
+                updatedEventData = addElementToStart('event', updatedEventData);
+                console.log('eventData updated: ', updatedEventData);
 
-                eventHistory.push(eventData);
+                eventHistory.push(updatedEventData);
 
-                if (eventData.eventSource == "webmarketing" 
+                if (updatedEventData.eventSource == "webmarketing" 
                     && settingsObject.check_espEnabled == true) {
 
                     prepEventForESP(eventData);
@@ -1418,6 +1486,13 @@
                 if (settingsObject.check_rtdmEnabled == true) {
 
                     prepEventForRTDM(eventData);
+
+                    // call RTDM specific event for specific CI360 event  
+                    //if (eventData.eventname.search(settingsObject.CI360EventForRtdmEvent) > 0) {
+                    if (eventData.eventname.search("SMS") > 0 || eventData.eventname.search("Telegram") > 0) { 
+                        //console.log("specific CI360 event = ", settingsObject.CI360EventForRtdmEvent);
+                        prepCI360EventForRTDM(eventData);
+                    }
                     
                 }
 
@@ -1429,8 +1504,6 @@
                 updateEventHistoryDiagram();
                 updateEventHistoryTable();
                 updateCi360HistoryTable();
-                
-                //checkAndUpdateSession(eventData);
 
                 // display details of last event
                 var lastEventId = eventHistory.length - 1;
@@ -1457,8 +1530,10 @@
                     eventFound = true;
                 } 
             }
-            if (eventFound == false && obj.eventname != undefined) {
-                //console.log("event not found ....inserting");
+            // get rid of undefined in 360 Events tab
+            //console.log('aggrEventHistory: obj.eventname = ', obj.eventname);
+            if (eventFound == false && obj.eventname != "undefined" && obj.eventname != undefined) {
+                //console.log("aggrEventHistory: event not found ...inserting");
                 aggrEvent = {};
                 aggrEvent.timestamp = obj.timestamp
                 aggrEvent.eventname = decodeURIComponent(obj.eventname);
@@ -1492,7 +1567,7 @@
         if ((lastEvent.eventSource != undefined && lastEvent.eventSource == 'webmarketing' )
              || lastEvent.event == "IdentityEvent") {
              
-            lastEvent.eventText = lastEvent.event == "IdentityEvent" ? "Customer Login" : decodeURIComponent(lastEvent.eventname);
+            lastEvent.eventText = lastEvent.event == "IdentityEvent" ? "Customer Login" : decodeURIComponent(lastEvent.eventText);
             lastEvent.eventname = decodeURIComponent(lastEvent.eventname);
 
         } else if (lastEvent.event == 'click') {
@@ -1674,6 +1749,7 @@
         var pairs = dataString.split("&");
         var objects = pairs.map(function(item) { parts = item.split("="); if(parts.length > 0) { var obj = {}; obj[parts[0]] = parts.slice(1).join("="); return obj};})
         var result = objects.reduce(function(resultObj,currentValue,currentIndex,arr) { for(attr in currentValue) resultObj[attr] = currentValue[attr]; return resultObj}, {});
+        //console.log("parseData: " + JSON.stringify(result));
         return result;
     }
 
@@ -1789,7 +1865,16 @@
                 break;
             }
         }
-        return decodeURIComponent(identityEvent.login_event);
+        var login = "not found";
+        login = identityEvent.User_ID_Attribute ? decodeURIComponent(identityEvent.User_ID_Attribute) : decodeURIComponent(identityEvent.login_event);
+
+        console.log("[getLoginFromLastIdentityEvent] -- User_ID_Attribute: " 
+            + decodeURIComponent(identityEvent.User_ID_Attribute));
+        console.log("[getLoginFromLastIdentityEvent] -- login_event: " 
+            + decodeURIComponent(identityEvent.login_event));
+        
+        //return decodeURIComponent(identityEvent.login_event);
+        return login;
     }
 
     function getCustomer(customerIdentifier) {
@@ -1875,7 +1960,7 @@
         var espUrl = "http://" + settingsObject.espHost + ":" + settingsObject.espPort 
                 + "/inject/" + settingsObject.espProjectQuery + "/" + settingsObject.espSourceWindow + "?blocksize=1";
 
-        console.log("  send 360 event to ESP: ",espUrl );
+        console.log("  send 360 event to ESP " );
                     
         var eventObject = eventData;
         eventObject.eventname = decodeURIComponent(eventObject.eventname);
@@ -1905,13 +1990,64 @@
             rtdmRequestInputs['customerid'] = customerid;
         
 
-        console.log("  send 360 event to RTDM: ", rtdmRequestInputs);
+        console.log("  send event to RTDM ");
         
-        sendRequestToRTDM(rtdmEngine.host, settingsObject.rtdmEvent, rtdmRequestInputs).success(
+        sendRequestToRTDM(settingsObject.rtdmHost, settingsObject.rtdmEvent, rtdmRequestInputs).success(
             function (response) {
-                console.log("    RTDM Send Success");
+                console.log("    [prepEventForRTDM] RTDM Send Success");
             }).error(function (response) {
-                console.log("    RTDM Send Failed");
+                console.log("    [prepEventForRTDM] RTDM Send Failed: " + JSON.stringify(response));
+        });
+    }
+
+    function prepCI360EventForRTDM(eventData) {
+        //var eventObject = eventData;
+        
+        eventData.eventname = decodeURIComponent(eventData.eventname);
+        eventData.page_title = decodeURIComponent(eventData.page_title);
+        eventData.referrer = decodeURIComponent(eventData.referrer);
+        var rtdmRequestInputs = eventData; 
+        var custAttr          = getCustomer(eventData.identity);
+        var stringcustid      = custAttr.customerid ? custAttr.customerid : "0";
+        var custName          = custAttr.Name ? custAttr.Name : "no name";      
+        var customerid        = parseInt(stringcustid);
+        var message           = settingsObject.messageTemplate;
+        var telegramImage     = settingsObject.telegramImage ? settingsObject.telegramImage : "";
+        var mobile            = custAttr.Mobile ? custAttr.Mobile : "0";
+        var telegramid        = custAttr.TelegramId ? custAttr.TelegramId : "0";
+
+        for (prop in custAttr) {
+            message = message.replace(new RegExp("\\(\\("+ prop+ "\\)\\)",'g'), custAttr[prop]);
+        }
+           
+        rtdmRequestInputs['customerid'] = customerid;
+        rtdmRequestInputs['Message']    = message;
+        rtdmRequestInputs['subject']    = "";
+        /*rtdmRequestInputs['Channel']    = settingsObject.channel;
+
+        if (settingsObject.channel == "TELEGRAM") {
+            rtdmRequestInputs['Recipient'] = telegramid;
+        } else if (settingsObject.channel == "SMS") {
+            rtdmRequestInputs['Recipient'] = mobile;
+        }*/
+        if (eventData.eventname.search('SMS') > 0) { // send SMS
+            rtdmRequestInputs['Channel']   = 'SMS';           
+            rtdmRequestInputs['Recipient'] = mobile;
+        } else if (eventData.eventname.search('Telegram') > 0) {  // send TELEGRAM
+            rtdmRequestInputs['Channel']   = 'TELEGRAM';            
+            rtdmRequestInputs['Recipient'] = telegramid;
+            rtdmRequestInputs['subject']   = telegramImage;
+        }
+
+        console.log("  send specific 360 event to RTDM because eventname is equals " + eventData.eventname);
+        console.log("  rtdmRequestInputs: " + JSON.stringify(rtdmRequestInputs));
+        
+        sendRequestToRTDM(settingsObject.rtdmHost, settingsObject.rtdmEventForCI360Event, rtdmRequestInputs).success(
+            function (response) {
+                console.log("    [prepCI360EventForRTDM] RTDM Send Success");
+            }).error(function (response) {
+                console.log("    [prepCI360EventForRTDM] RTDM Send Failed" + JSON.stringify(response));
+                console.log(response);
         });
     }
 
@@ -1929,6 +2065,10 @@
 
     function callApi(parameters) {
         var apiUrl = window.location.protocol + "//" + window.location.host + "/CI360Inspector2/api/";
+        if (window.location.host == "www.cidemo.sas.com") {
+            apiUrl = window.location.href + "/api/index_cidemo.php";
+        } 
+        console.log("call api: " + apiUrl);
         return $.ajax(apiUrl, {
             type: 'POST',
             data: parameters
@@ -2111,6 +2251,9 @@
 
         option = "<option value='"+ settingsObject['rtdmEvent'] + "'>" + settingsObject['rtdmEvent'] +"</option>";
         $('#rtdmEvent').append(option);
+
+        option = "<option value='"+ settingsObject['rtdmEventForCI360Event'] + "'>" + settingsObject['rtdmEventForCI360Event'] +"</option>";
+        $('#rtdmEventForCI360Event').append(option);
     }
 
     function onRtdmHostEnterPress(e, elem) {
@@ -2132,7 +2275,8 @@
         }).error(function (elem) {
             jqElem.addClass("btn-fail");
             $('.rtdmEvent').html("");
-            $('.rtdmEvent').val(settingsObject.rtdmEvent);
+            $('#rtdmEvent').val(settingsObject.rtdmEvent);
+            $('#rtdmEventForCI360Event').val(settingsObject.rtdmEventForCI360Event);
         });
     }
 
@@ -2147,7 +2291,8 @@
             }
         }
         $('.rtdmEvent').html(options);
-        $('.rtdmEvent').val(settingsObject.rtdmEvent);
+        $('#rtdmEvent').val(settingsObject.rtdmEvent);
+        $('#rtdmEventForCI360Event').val(settingsObject.rtdmEventForCI360Event);
     }
     /*** Configurator Functions ***/
 
@@ -2157,6 +2302,7 @@
         loadPreviousEvents();
         displayEmptyCustomerAttributes();
         updateLabels();
+        $('.extra').hide();
 
         window.addEventListener('message', function(event) {
             // The data sent with postMessage is stored in event.data
@@ -2166,6 +2312,7 @@
                 //console.dir(parseData(event.data.payload));
 
                 if(event.data.type == "tracking") {
+                    //console.log("readyfunction: ", event.data.payload);
                     trackEvent(parseData(event.data.payload));
                 }
 
